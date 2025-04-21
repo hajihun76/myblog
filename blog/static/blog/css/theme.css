@@ -1,0 +1,159 @@
+* {
+  font-family: "Spoqa Han Sans Neo", sans-serif;
+}
+
+:root {
+  --border: #e3e1dc;
+  --text: #fff;
+  --link: #fff;
+  --site-footer: #bcb9b0;
+  --site-footer-background: #2f2c28;
+  --max-content-width: 1000px;
+  --input-background: #fff;
+  --input-border: #cccac3;
+  --input-error: #999;
+  --input-error-border: #e6584e;
+  --input-focus-border: #ffcc00;
+  --input-focus-background: #fffdf3;
+  --input-placeholder: #bcb9b0;
+  --button-text: #fff;
+  --button-primary-background: #222;
+  --button-primary-hover-background: #444;
+  --account-link: #fff;
+  --box-border: #e3e1dc;
+  --dialog-border: #e3e1dc;
+  --dialog-background: #f6f5f3;
+  --dialog-info: #e1811b;
+  --max-content-width: 1000px;
+  --file-content-border: #cccac3;
+  --file-content-background: #fff;
+}
+
+div.cp-input {
+  display: inline-block;
+  position: relative;
+}
+
+input.cp-input,
+textarea.cp-input,
+.cp-input input {
+  width: 100%;
+  font-size: 17px;
+  letter-spacing: -0.3px;
+  padding: 16px 24px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-background);
+  outline: none;
+  border-radius: 7px;
+}
+
+input.cp-input:focus,
+textarea.cp-input:focus,
+.cp-input input:focus {
+  background-color: var(--input-focus-background);
+  border-color: var(--input-focus-border);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+input.cp-input::placeholder,
+textarea.cp-input::placeholder,
+.cp-input input::placeholder {
+  color: var(--input-placeholder);
+}
+
+textarea.cp-input {
+  line-height: 1.82;
+  resize: none;
+}
+
+.cp-button {
+  border: none;
+  outline: none;
+  padding: 16px 28px;
+  border-radius: 9999px;
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: -0.32px;
+  cursor: pointer;
+  background-color: var(--button-primary-background);
+  color: var(--button-text);
+}
+
+.cp-button:hover,
+.cp-button:active {
+  color: var(--button-text);
+  background-color: var(--button-primary-hover-background);
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.cp-input.error {
+  border: 1px solid var(--input-error-border);
+  background-position: top 13px right 13px;
+  background-image: url("../images/ic-error.svg");
+  background-size: 29px;
+  background-repeat: no-repeat;
+}
+
+.error-message {
+  color: var(--input-error);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.cp-input:not(.error) ~ .error-message {
+  display: none;
+}
+
+.cp-input.error ~ .error-message {
+  display: block;
+  width: 100%;
+  text-align: right;
+}
+
+.cp-box {
+  padding: 68px 145px;
+  border-radius: 6px;
+  border: solid 2px var(--box-border);
+}
+
+.cp-dialog {
+  padding: 21px 55px 21px 40px;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: -0.35px;
+  border-radius: 6px;
+  border: solid 1px var(--dialog-border);
+  background-color: var(--dialog-background);
+}
+
+.cp-dialog.info {
+  color: var(--dialog-info);
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.account-password-dialog {
+  margin: 100px auto;
+  text-align: center;
+  width: 100%;
+}
+
+.account-password-dialog .button {
+  margin-top: 5px;
+  text-decoration: none;
+}
+
+a.cp-button {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+}
+
+.cp-button.inverted {
+  padding: 5px 17px;
+  font-size: 17px;
+  font-weight: 300;
+  background-color: transparent;
+  color: #999;
+  border: 1px solid #fff;
+}

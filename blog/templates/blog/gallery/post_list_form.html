@@ -1,0 +1,50 @@
+{% extends "blog_base/base_with_navbar.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}새 목록 작성{% endblock title %}
+
+{% block content %}
+<main class="site-body">
+  <form class="review-form max-content-width" method="post" autocomplete="off" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="title">
+      {{ form.title|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:제목" }}
+      {% for error in form.title.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="restaurant-name">
+      {{ form.content|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:내용을 입력해 주세요." }}
+      {% for error in form.content.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="restaurant-link">
+      {{ form.created_at|add_class:"cp-input"|add_error_class:"error" }}
+      {% for error in form.created_at.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="file">
+      <div class="file-content">
+        <div>  
+          {{ form.thumb }}
+          {% for error in form.thumb.errors %}
+            <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="buttons">
+      <a 
+        class="cp-button secondary cancel" 
+        href="{% if review %}{% url 'review-detail' review.id %}{% else %}{% url 'index' %}{% endif %}"
+      >
+        취소
+      </a>
+      <button class="cp-button submit" type="submit">완료</button>
+    </div>
+  </form>
+</main>
+{% endblock content %}

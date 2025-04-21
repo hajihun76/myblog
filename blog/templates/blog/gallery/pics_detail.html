@@ -1,0 +1,51 @@
+{% extends "blog_base/base_with_navbar.html" %}
+{% load static %}
+{% load exif_extras %} 
+
+{% block title %}{{ post_list.title }}{% endblock title %}
+
+{% block content %}
+<main class="site-body">
+  <div class="container_detail">
+    <div>
+      <img class="responsive-img" src="{{ pic.image.url }}" alt="Original Image">
+    </div>
+    <section class="meta_info">
+      {% if exif %}
+        <ul>
+          {% if exif.Make and exif.Model %}
+            <li>카메라: {{ exif.Make }} {{ exif.Model }}</li>
+          {% endif %}
+          {% if exif.LensModel %}
+            <li>렌즈: {{ exif.LensModel }}</li>
+          {% endif %}
+          {% if exif.FocalLength %}
+              <li>초점 거리: {{ exif.FocalLength|rational_to_float }} mm</li>
+          {% endif %}
+          {% if exif.FNumber %}
+            <li>
+              조리개: f/{{ exif.FNumber|rational_to_float }}
+            </li>
+          {% endif %}
+          {% if exif.ExposureTime %}
+            {% with num=exif.ExposureTime.0 den=exif.ExposureTime.1 %}
+              <li>셔터 속도: {{ num }}/{{ den }} 초</li>
+            {% endwith %}
+          {% endif %}
+          {% if exif.ISOSpeedRatings %}
+            <li>ISO: {{ exif.ISOSpeedRatings }}</li>
+          {% endif %}
+          {% if exif.DateTimeOriginal %}
+            <li>촬영 일시: {{ exif.DateTimeOriginal }}</li>
+          {% endif %}
+        </ul>
+        <div class="content_detail">
+          {{ pic.content|linebreaksbr}}
+        </div>
+      {% else %}
+        <p>EXIF 정보가 없습니다.</p>
+      {% endif %}
+    </section>
+  </div>
+</main>
+{% endblock content %}

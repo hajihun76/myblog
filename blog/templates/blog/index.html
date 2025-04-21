@@ -1,0 +1,66 @@
+{% extends "blog_base/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<main class="site-body">
+  <div class="container">
+    <img class="logo main" src="{% static 'blog/images/logo.png' %}" alt="Hun's Home Logo">
+  </div>
+  <div class="container box">
+    <div class="post_container">
+      <div class="post">
+        <a href="{% url "gallery_list" %}">
+          <h2>Gallery</h2>
+          <p class="text">이 곳은 그동안 제가 찍어왔던 사진이나 동영상을 올리는 개인적인 공간입니다.</p>
+          <p class="last">사진, 동영상, 드론영상</p>
+        </a>
+      </div>
+      <div class="post">
+        <a href="{% url "tour_list" %}">
+          <h2>맛집, 여행지</h2>
+          <p class="text">바이크나 자동차여행 자전거여행 맛집투어등등 저와 여러분의 여행들을 담을 공간입니다.</p>
+          <p class="last">맛집사진, 여행사진</p>
+        </a>
+      </div>
+      <div class="post">
+        <a href="{% url "community_list" %}">
+          <h2>Community</h2>
+          <p class="text">회원들의 대화 공간... 그냥 편한 이야기들을 올려 주세요.</p>
+          <p class="last">게시판</p>
+        </a>
+      </div>
+      <div class="post">
+        <a href="{% url "community_list" %}">
+          <h2>공사중!!</h2>
+          <p class="text">앞으로 추가될 예정인데 무얼 추가해야할까요? ㅜㅜ</p>
+          <p class="last">몰랑 아 몰랑</p>
+        </a>
+      </div>
+      <div class="post">
+        <a href="{% url "community_list" %}">
+          <h2>공사중!!</h2>
+          <p class="text">앞으로 추가될 예정인데 무얼 추가해야할까요? ㅜㅜ</p>
+          <p class="last">몰랑 아 몰랑</p>
+        </a>
+      </div>
+      <div class="post">
+        <a href="{% url "community_list" %}">
+          <h2>Members-Only Secret Space</h2>
+          <p class="text">개인 회원들의 공간입니다. 특별한 이야기들을 나눠 보아요~!!</p>
+          <p class="last">게시판</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+
+{% block footer %}
+<footer class="site-footer">
+  <div class="max-content-width content">
+    <div>hajihun76@gmail.com</div>
+    <div>Crafted with passion by Jihoon Ha.</div>
+  </div>
+</footer>
+{% endblock footer %}

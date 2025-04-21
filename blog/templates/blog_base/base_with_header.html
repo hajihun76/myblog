@@ -1,0 +1,10 @@
+{% extends "blog_base/base.html" %}
+{% load static %}
+
+{% block header %}
+<header class="">
+  <a href="{% url "index" %}">
+    <img class="logo" src="{% static 'blog/images/logo.png' %}" alt="Hun's Home Logo">
+  </a>
+</header>
+{% endblock header %}

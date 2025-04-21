@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'blog/css/theme.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'blog/css/styles.css' %}">
+  <link rel="shortcut icon" type="image/png" href="{% static 'blog/images/favicon.ico' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MainStory{% endblock title %} | Hun's Home</title>
+  <meta name="description" content="{% block description %}지훈의 사진과 일상이 담긴 블로그{% endblock %}">
+  
+  <!-- Open Graph 태그 (선택 사항: SNS 공유시 노출) -->
+  <meta property="og:title" content="{% block og_title %}Hun's Home{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}지훈의 사진과 일상 블로그{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:image" content="{% static 'images/huns_home_logo.png' %}">
+</head>
+<body>
+  {% block header %}{% endblock header %}
+  {% block content %}{% endblock content %}
+  {% block footer %}{% endblock footer %}
+</body>
+</html>

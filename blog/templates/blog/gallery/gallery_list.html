@@ -1,0 +1,26 @@
+{% extends "blog_base/base_with_navbar.html" %}
+{% load static %}
+
+{% block title %}Gallery{% endblock title %}
+
+{% block content %}
+<main class="site-body">
+  <div class="button_sample">
+    <a href="{% url "post_list_create" %}">목록 작성</a>
+  </div>
+  <div class="container box">
+    <div class="post_container">
+      {% for post in posts %}
+        <div class="post">
+          <a href="{% url "post_list_detail" post.id %}">
+            <div class="thumb" style="background-image: url('{{ post.thumb.url }}');"></div>
+            <h2>{{ post.title }}</h2>
+            <p class="text">{{ post.content }}</p>
+            <p class="last">{{ post.created_at }}</p>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock content %}

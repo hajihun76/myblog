@@ -1,0 +1,350 @@
+html{
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  background: url("../images/bg.jpg") no-repeat center top/cover;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: auto;
+  word-break: keep-all;
+}
+
+.logo{
+  padding-top: 56px;
+  padding-left: 17px;
+}
+
+.site-header.navbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.site-header .content {
+  display: flex;
+  height: 70px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+
+ul.navbar {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul.navbar li ~ li {
+  margin-left: 65px;
+}
+
+ul.navbar li {
+  font-size: 17px;
+  letter-spacing: -0.26px;
+}
+
+a,
+a:hover {
+  color: var(--text);
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+.site-footer {
+  color: var(--site-footer);
+  background-color: var(--site-footer-background);
+}
+
+.max-content-width {
+  max-width: var(--max-content-width);
+  width: 100%;
+}
+
+.site-header .content,
+.site-footer .content {
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.site-footer .content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 95px;
+}
+
+body > .site-body {
+  flex: 1 1;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 899px;
+  margin: 0 auto;
+}
+
+.container-search {
+  display: flex;
+  align-items: center;
+  width: 899px;
+  margin: 0 auto;
+}
+
+.box {
+  margin-top: 50px;
+}
+
+.post_container{
+  display: grid;
+  margin-bottom: 35px;
+  grid-template-columns: repeat(3,1fr);
+  grid-auto-rows: minmax(322px, auto);
+  grid-column-gap: 58px;
+  grid-row-gap: 35px;
+}
+
+.post_container_thumb{
+  display: grid;
+  margin-bottom: 35px;
+  grid-template-columns: repeat(7,1fr);
+  /* grid-auto-rows: minmax(322px, auto);
+  grid-column-gap: 58px;
+  grid-row-gap: 35px; */
+}
+
+.post{
+  background: #26252a;
+  padding: 30px 29px 40px 27px;
+  box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.09);
+}
+.post:hover{
+  background: rgba(41, 40, 46, 0.8);
+  transition: all .15s;
+}
+.post a{
+  text-decoration: none;
+}
+.post h2{
+  height: 54px;
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: -0.42px;
+  overflow: hidden; 
+  text-overflow: 
+  ellipsis; display: 
+  -webkit-box; -webkit-line-clamp: 2; 
+  line-clamp: 2; 
+  -webkit-box-orient: vertical; word-wrap:break-word;
+}
+
+.post .text{
+  font-size: 14px;
+  color: #a9abb7;
+  line-height: 2.07;
+  letter-spacing: -0.32px;
+  overflow: hidden; 
+  text-overflow: 
+  ellipsis; display: 
+  -webkit-box; -webkit-line-clamp: 5; 
+  line-clamp: 5; 
+  -webkit-box-orient: vertical; word-wrap:break-word;
+}
+
+.post .last{
+  text-align: right;
+  margin: 23px 0 17px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #e38917;
+  letter-spacing: -0.25px;
+}
+
+.account {
+  margin: 200px auto;
+  max-width: 450px;
+  width: 100%;
+}
+
+.account-search {
+  max-width: 450px;
+  width: 100%;
+}
+
+.account .title {
+  margin: 24px auto;
+  text-align: center;
+}
+
+.space-input {
+  margin: 20px 0;
+}
+
+.account .button {
+  display: block;
+  width: 100%;
+  margin: 20px 25px;
+}
+
+.account .info {
+  width: max-content;
+  margin: 25px auto;
+  color: #999;
+  text-align: center;
+}
+
+.account .info .link {
+  margin-left: 13px;
+  color: var(--account-link);
+}
+
+.account .info .item {
+  display: inline-block;
+  min-width: 140px;
+  padding: 0 21px;
+  margin-left: 22px;
+}
+
+.account .info .item + .item {
+  border-left: 1px solid var(--border);
+}
+
+.account-password {
+  margin: 100px auto;
+  padding: 68px 150px;
+  max-width: 740px;
+  width: 100%;
+}
+
+.account-password .title {
+  color: #fff;
+  margin: 24px auto;
+  text-align: center;
+}
+
+.account-password .heading {
+  font-size: 25px;
+  font-weight: normal;
+}
+
+.account-password form > :not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.account-password button[type="submit"] {
+  display: block;
+  width: 100%;
+  margin: 20px 25px 25px;
+}
+
+.post .thumb {
+  display: block;
+  height: 167px;
+  border-radius: 18px;
+  background-position: center;
+  background-size: cover;
+}
+
+.review-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px 14px;
+  margin: 85px auto 410px;
+}
+
+.review-form > .title,
+.review-form > .content,
+.review-form > .file,
+.review-form > .buttons {
+  grid-column: span 2;
+}
+
+.review-form > .restaurant-name,
+.review-form > .restaurant-link {
+  grid-column: span 2;
+}
+
+.review-form .content textarea {
+  height: 526px;
+}
+
+.review-form .file-content {
+  display: flex;
+  align-items: center;
+  line-height: 2;
+  font-size: 17px;
+  letter-spacing: -0.3px;
+  padding: 16px 24px;
+  border: 1px solid var(--file-content-border);
+  background-color: var(--file-content-background);
+  border-radius: 7px;
+  width: 100%;
+}
+
+.review-form .file-content input {
+  font-size: 17px;
+}
+
+.review-form .file-content > img {
+  width : 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.review-form .buttons {
+  display: flex;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.review-form .buttons > .cancel {
+  flex-grow: 1;
+}
+
+.review-form .buttons > button[type="submit"] {
+  flex-grow: 6;
+  margin-left: 9px;
+}
+
+.max-content-width {
+  max-width: var(--max-content-width);
+  width: 100%;
+}
+
+.pics_thumb {
+  width: 200px;
+  display: inline-block;
+}
+
+.pics_thumb img {
+  display: block;       /* 불필요한 여백 제거 */
+  width: auto;          /* 원본 비율 유지 */
+  height: auto;
+  max-width: 100%;
+}
+
+.post_thumb {
+  padding: 5px;
+  box-shadow: 0 2px 14px 0 rgba(255, 255, 255, 0.09);
+}
