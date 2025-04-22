@@ -156,12 +156,18 @@ body > .site-body {
   grid-row-gap: 35px; */
 }
 
+.post_index {
+  display: grid;
+  grid-template-rows: 380px 45px 1fr;
+}
+
 .post{
   background: #26252a;
   padding: 30px 29px 40px 27px;
   box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.09);
   border-radius: 8px;
 }
+
 .post:hover{
   background: rgba(41, 40, 46, 0.8);
   transition: all .15s;
@@ -395,4 +401,21 @@ body > .site-body {
   font-size: 21px;
   font-weight: bold;
   margin-left: 12px;
+}
+
+.up_de {
+  font-size: 12px;
+  padding: 10px 20px;
+}
+
+.last_position {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.center_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 400px;
 }

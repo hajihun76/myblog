@@ -102,6 +102,31 @@ body > .site-body {
   margin: 0 auto;
 }
 
+.container_detail {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  width: 1280px;
+  margin: 0 auto;
+}
+
+.responsive-img {
+  width: 1280px;   /* 원하는 고정 가로값 */
+  height: auto;   /* 세로는 원본 비율 따라 자동 계산 */
+  display: block; /* inline-block 여백 제거나 레이아웃 이슈 해결용 */
+  max-width: 100%;/* 화면 폭보다 커지지 않도록 반응형 */
+/* 선택 사항:
+  object-fit: contain; 
+  /* 잘릴 때 비율 유지 등 추가 제어가 필요하면 */
+}
+
+.meta_info {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  background-color: #a9abb7;
+  font-size: 14px;
+}
+
 .container-search {
   display: flex;
   align-items: center;
@@ -135,6 +160,7 @@ body > .site-body {
   background: #26252a;
   padding: 30px 29px 40px 27px;
   box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.09);
+  border-radius: 8px;
 }
 .post:hover{
   background: rgba(41, 40, 46, 0.8);
@@ -347,4 +373,26 @@ body > .site-body {
 .post_thumb {
   padding: 5px;
   box-shadow: 0 2px 14px 0 rgba(255, 255, 255, 0.09);
+}
+
+.content_detail {
+  background-color: azure;
+  padding: 10px 10px;
+  text-align: center;
+}
+
+.button_sample {
+  position: relative;
+  left: 500px;
+  top: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #c7c8cb;
+  border-radius: 9999px;
+  width: 125px;
+  height: 55px;
+  font-size: 21px;
+  font-weight: bold;
+  margin-left: 12px;
 }

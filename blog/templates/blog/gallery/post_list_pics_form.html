@@ -27,7 +27,7 @@
     <div class="buttons">
       <a 
         class="cp-button secondary cancel" 
-        href="{% if review %}{% url 'review-detail' review.id %}{% else %}{% url 'index' %}{% endif %}"
+        href="{% url "post_list_detail" post_list.id %}"
       >
         취소
       </a>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from allauth.account.views import PasswordChangeView
 from .models import Post, PostList, PostListPics
 from .forms import PostForm, PostListForm, PostListPicsForm
@@ -62,6 +62,23 @@ class PostListCreateView(CreateView):
     def get_success_url(self):
         return reverse('gallery_list')
 
+class PostListUpdateView(UpdateView):
+    model = PostList
+    form_class = PostListForm
+    template_name = 'blog/gallery/post_list_form.html'
+    pk_url_kwarg = 'post_list_id'
+
+    def get_success_url(self):
+        return reverse('gallery_list')
+
+class PostListDeleteView(DeleteView):
+    model = PostList
+    template_name = 'blog/post_confirm_delete.html'
+    pk_url_kwarg = 'post_list_id'
+
+    def get_success_url(self):
+        return reverse('gallery_list')
+
 class PostListPicsCreateView(CreateView):
     model = PostListPics
     form_class = PostListPicsForm
@@ -71,6 +88,15 @@ class PostListPicsCreateView(CreateView):
         form.instance.post_list_id = self.kwargs['post_list_id']
         return super().form_valid(form)
     
+    def get_success_url(self):
+        return reverse('post_list_detail', kwargs={'post_list_id': self.kwargs['post_list_id']})
+
+class PostListPicsUpdateView(UpdateView):
+    model = PostListPics
+    form_class = PostListPicsForm
+    template_name = 'blog/gallery/post_list_pics_form.html'
+    pk_url_kwarg = 'pics_id'
+
     def get_success_url(self):
         return reverse('post_list_detail', kwargs={'post_list_id': self.kwargs['post_list_id']})
 

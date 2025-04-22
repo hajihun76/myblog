@@ -11,13 +11,17 @@
   <div class="container box">
     <div class="post_container">
       {% for post in posts %}
-        <div class="post">
+        <div class="post post_index">
           <a href="{% url "post_list_detail" post.id %}">
             <div class="thumb" style="background-image: url('{{ post.thumb.url }}');"></div>
             <h2>{{ post.title }}</h2>
             <p class="text">{{ post.content }}</p>
-            <p class="last">{{ post.created_at }}</p>
           </a>
+          <p class="last">{{ post.created_at }}</p>
+          <div class="last_position">
+            <a class="cp-button up_de" href="{% url 'post_list_delete' post.id %}">삭제</a>
+            <a class="cp-button up_de" href="{% url 'post_list_edit' post.id %}">수정</a>
+          </div>
         </div>
       {% endfor %}
     </div>
