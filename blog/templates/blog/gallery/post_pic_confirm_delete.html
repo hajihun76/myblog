@@ -1,0 +1,20 @@
+{% extends "blog_base/base_with_navbar.html" %}
+{% load static %}
+
+{% block title %}{{ object.title }}{% endblock title %}
+
+{% block content %}
+<main class="site-body">
+  <div class="center_box">
+    <form class="cp-dialog confirm-delete" method="post">
+      {% csrf_token %}
+      <span class="content">정말 게시물을 삭제하시겠습니까?</span>
+      <div class="last_position">
+        <p></p>
+        <button class="cp-button" type="submit">삭제</button>
+        <a class="cp-button" href="{% url "post_list_detail" object.post_list.id %}">취소</a>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock content %}

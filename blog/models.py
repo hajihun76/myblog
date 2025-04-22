@@ -41,6 +41,9 @@ class PostListPics(models.Model):
     post_list = models.ForeignKey(
         'PostList', on_delete=models.CASCADE, related_name='pics'
     )
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
     content = models.TextField(null=True, blank=True)
     # ① 원본
     image = models.ImageField(upload_to='post_list_pics/original/')

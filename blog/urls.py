@@ -14,6 +14,7 @@ urlpatterns = [
     path('post_lists/<int:post_list_id>/', views.PostListPicsListView.as_view(), name='post_list_detail'),
     path('posts/lists/<int:post_list_id>/pics/new/', views.PostListPicsCreateView.as_view(), name='post_list_pics_create'),
     path('posts/lists/<int:post_list_id>/pics/<int:pics_id>/edit/', views.PostListPicsUpdateView.as_view(), name='post_list_pics_edit'),
+    path('posts/lists/<int:post_list_id>/pics/<int:pics_id>/delete/', views.PostListPicsDeleteView.as_view(), name='post_list_pics_delete'),
 
     # PostList 갤러리 상세 페이지
     path('posts/lists/<int:post_list_id>/pics/<int:pics_id>/', views.PostPicsDetailView.as_view(), name='post_pics_detail'),

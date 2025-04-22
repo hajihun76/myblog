@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from allauth.account.views import PasswordChangeView
+from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, PostList, PostListPics
 from .forms import PostForm, PostListForm, PostListPicsForm
 
@@ -32,7 +33,7 @@ class PostPicsDetailView(DetailView):
         context['exif'] = self.object.metadata or {}
         return context
 
-class PostListPicsListView(ListView):
+class PostListPicsListView(LoginRequiredMixin, ListView):
     model = PostListPics
     template_name = 'blog/gallery/post_pics_detail.html'
     context_object_name = 'post_list_pics'
@@ -50,7 +51,7 @@ class PostListPicsListView(ListView):
         )
         return context
 
-class PostListCreateView(CreateView):
+class PostListCreateView(LoginRequiredMixin, CreateView):
     model = PostList
     form_class = PostListForm
     template_name = 'blog/gallery/post_list_form.html'
@@ -62,43 +63,84 @@ class PostListCreateView(CreateView):
     def get_success_url(self):
         return reverse('gallery_list')
 
-class PostListUpdateView(UpdateView):
+class PostListUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = PostList
     form_class = PostListForm
     template_name = 'blog/gallery/post_list_form.html'
     pk_url_kwarg = 'post_list_id'
 
+    # 익명(unauthenticated) 사용자도 403을 받도록
+    redirect_unauthenticated_users = False
+    # 인증됐는데 test_func()를 통과 못 하면 403을 띄움
+    raise_exception = True
+
     def get_success_url(self):
         return reverse('gallery_list')
+    
+    def test_func(self, user):
+        post = self.get_object()
+        return post.author == user
 
-class PostListDeleteView(DeleteView):
+class PostListDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = PostList
-    template_name = 'blog/post_confirm_delete.html'
+    template_name = 'blog/gallery/post_confirm_delete.html'
     pk_url_kwarg = 'post_list_id'
 
+    # 익명(unauthenticated) 사용자도 403을 받도록
+    redirect_unauthenticated_users = False
+    # 인증됐는데 test_func()를 통과 못 하면 403을 띄움
+    raise_exception = True
+
     def get_success_url(self):
         return reverse('gallery_list')
+    
+    def test_func(self, user):
+        post = self.get_object()
+        return post.author == user
 
-class PostListPicsCreateView(CreateView):
+class PostListPicsCreateView(LoginRequiredMixin, CreateView):
     model = PostListPics
     form_class = PostListPicsForm
     template_name = 'blog/gallery/post_list_pics_form.html'
 
     def form_valid(self, form):
         form.instance.post_list_id = self.kwargs['post_list_id']
+        form.instance.author = self.request.user
         return super().form_valid(form)
     
     def get_success_url(self):
         return reverse('post_list_detail', kwargs={'post_list_id': self.kwargs['post_list_id']})
 
-class PostListPicsUpdateView(UpdateView):
+class PostListPicsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = PostListPics
     form_class = PostListPicsForm
     template_name = 'blog/gallery/post_list_pics_form.html'
     pk_url_kwarg = 'pics_id'
 
+    redirect_unauthenticated_users = False
+    raise_exception = True
+
     def get_success_url(self):
         return reverse('post_list_detail', kwargs={'post_list_id': self.kwargs['post_list_id']})
+    
+    def test_func(self, user):
+        pic = self.get_object()
+        return pic.author == user
+
+class PostListPicsDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = PostListPics
+    template_name = 'blog/gallery/post_pic_confirm_delete.html'
+    pk_url_kwarg = 'pics_id'
+
+    redirect_unauthenticated_users = False
+    raise_exception = True
+
+    def get_success_url(self):
+        return reverse('post_list_detail', kwargs={'post_list_id': self.kwargs['post_list_id']})
+    
+    def test_func(self, user):
+        pic = self.get_object()
+        return pic.author == user
 
 # 맛집 여행 목록
 class TourListView(ListView):

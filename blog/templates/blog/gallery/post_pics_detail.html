@@ -17,10 +17,12 @@
               <img src={{ pics.thumbnail.url }} alt="Gallery Image">
             </div>
           </a>
-          <div class="last_position">
-            <a class="cp-button up_de" href="#">삭제</a>
-            <a class="cp-button up_de" href="{% url "post_list_pics_edit" post_list.id pics.id %}">수정</a>
-          </div>
+          {% if pics.author == user %}
+            <div class="last_position">
+              <a class="cp-button up_de" href="{% url "post_list_pics_delete" post_list.id pics.id %}">삭제</a>
+              <a class="cp-button up_de" href="{% url "post_list_pics_edit" post_list.id pics.id %}">수정</a>
+            </div>
+          {% endif %}
         </div>
       {% endfor %}
     </div>

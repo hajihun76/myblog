@@ -18,10 +18,12 @@
             <p class="text">{{ post.content }}</p>
           </a>
           <p class="last">{{ post.created_at }}</p>
-          <div class="last_position">
-            <a class="cp-button up_de" href="{% url 'post_list_delete' post.id %}">삭제</a>
-            <a class="cp-button up_de" href="{% url 'post_list_edit' post.id %}">수정</a>
-          </div>
+          {% if post.author == user %}
+            <div class="last_position">
+              <a class="cp-button up_de" href="{% url 'post_list_delete' post.id %}">삭제</a>
+              <a class="cp-button up_de" href="{% url 'post_list_edit' post.id %}">수정</a>
+            </div>
+          {% endif %}
         </div>
       {% endfor %}
     </div>

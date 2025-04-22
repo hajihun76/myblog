@@ -394,11 +394,11 @@ body > .site-body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #c7c8cb;
+  background-color: #767676;
   border-radius: 9999px;
-  width: 125px;
-  height: 55px;
-  font-size: 21px;
+  width: 95px;
+  height: 40px;
+  font-size: 12px;
   font-weight: bold;
   margin-left: 12px;
 }
@@ -418,4 +418,21 @@ body > .site-body {
   justify-content: center;
   align-items: center;
   margin-top: 400px;
+}
+
+.image-frame {
+  display: inline-block;
+  padding: 12px;                  /* 액자 테두리 두께만큼 여백 */
+  border: 8px solid #fff;         /* 흰색 액자 테두리 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* 그림자 효과 */
+  background: #eee;               /* 액자 배경색 */
+  border-radius: 4px;             /* 모서리 둥글게 */
+}
+
+/* 반응형으로 최대 너비 지정하고 비율 유지 */
+.image-frame img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 2px;             /* 이미지 자체 모서리 약간 둥글게 */
 }
