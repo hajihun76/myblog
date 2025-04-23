@@ -131,14 +131,18 @@ body > .site-body {
   margin: 0 auto;
 }
 
-.responsive-img {
-  width: 1280px;   /* 원하는 고정 가로값 */
-  height: auto;   /* 세로는 원본 비율 따라 자동 계산 */
-  display: block; /* inline-block 여백 제거나 레이아웃 이슈 해결용 */
-  max-width: 100%;/* 화면 폭보다 커지지 않도록 반응형 */
-/* 선택 사항:
-  object-fit: contain; 
-  /* 잘릴 때 비율 유지 등 추가 제어가 필요하면 */
+/* 가로사진 */
+.responsive-img.landscape {
+  width: 100%;
+  height: auto;
+}
+
+/* 세로사진 */
+.responsive-img.portrait {
+  width: auto;
+  height: 100vh;
+  display: block;
+  margin: 0 auto;
 }
 
 .meta_info {
@@ -382,7 +386,9 @@ body > .site-body {
 
 .pics_thumb {
   width: 200px;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .pics_thumb img {

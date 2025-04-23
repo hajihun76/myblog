@@ -153,7 +153,11 @@ class PostListPics(models.Model):
         # 2) 항상 썸네일 재생성
         if self.image:
             img = Image.open(self.image.path)
-            img.thumbnail((200, 9999), Image.LANCZOS)
+            w, h = img.size
+            if w >= h:
+                img.thumbnail((200, 9999), Image.LANCZOS)
+            else:
+                img.thumbnail((9999, 200), Image.LANCZOS)
 
             thumb_io = BytesIO()
             img.save(thumb_io, format='JPEG', quality=70)

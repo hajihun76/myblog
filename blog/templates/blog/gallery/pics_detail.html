@@ -8,7 +8,7 @@
 <main class="site-body">
   <div class="container_detail">
     <div class="image-frame">
-      <img class="responsive-img" src="{{ pic.image.url }}" alt="Original Image">
+      <img id="responsiveImg" class="responsive-img" src="{{ pic.image.url }}" alt="Original Image">
     </div>
     <section class="meta_info">
       {% if exif %}
@@ -49,3 +49,7 @@
   </div>
 </main>
 {% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'blog/js/responsive_image.js' %}"></script>
+{% endblock extra_js %}
