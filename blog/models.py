@@ -26,6 +26,46 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+    
+    def save(self, *args, **kwargs):
+        # --- 썸네일 생성 로직 시작 ---
+        # (1) 인스턴스가 기존에 DB에 있던 것이라면, old_pic 참조
+        old_pic = None
+        if self.pk:
+            try:
+                old = User.objects.get(pk=self.pk)
+                old_pic = old.profile_pic
+            except User.DoesNotExist:
+                pass
+
+        # (2) 새로 업로드된 파일이 있으면 thumbnail 생성
+        if self.profile_pic and (not old_pic or old_pic.name != self.profile_pic.name):
+            # 메모리에서 이미지 열기
+            img = Image.open(self.profile_pic)
+            # 비율 유지 최대 너비 300px
+            img.thumbnail((200, 200), Image.LANCZOS)
+
+            # JPEG로 메모리에 저장
+            thumb_io = BytesIO()
+            img.save(thumb_io, format='JPEG', quality=80)
+
+            # 원본 파일명에서 확장자 따오기
+            base, ext = os.path.splitext(os.path.basename(self.profile_pic.name))
+            thumb_name = f'{base}{ext}'
+
+            # profile_pic 필드 덮어쓰기 (메모리 내용으로)
+            self.profile_pic.save(
+                thumb_name,
+                ContentFile(thumb_io.getvalue()),
+                save=False
+            )
+
+            # (3) 이전 파일이 남아 있다면 파일 시스템에서 삭제
+            if old_pic and old_pic.name != self.profile_pic.name:
+                old_pic.delete(save=False)
+        # --- 썸네일 생성 로직 끝 ---
+
+        super().save(*args, **kwargs)
 
 class PostList(models.Model):
     title = models.CharField(max_length=20)

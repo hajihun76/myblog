@@ -1,0 +1,61 @@
+{% extends "blog_base/base_with_header.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}프로필 수정 | Coplate{% endblock title %}
+
+{% block content %}
+<main class="profile-form">
+  <form method="post" enctype="multipart/form-data" autocomplete="off">
+    {% csrf_token %}
+    <div class="profile">
+      {# ① 현재 프로필 사진 #}
+      <div id="profilePic" class="profile-pic cp-avatar large" style="background-image: url('{{ user.profile_pic.url }}')"></div>
+      <div class="file">
+        {# ② 파일 입력에 id, accept 속성 추가 #}
+        {{ form.profile_pic|add_class:"file-input"|attr:"id:id_profile_pic"|attr:"accept:image/*" }}
+      </div>
+    </div>
+    <div class="nickname">
+      {{ form.nickname|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:닉네임" }}
+      {% for error in form.nickname.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="content">
+      {{ form.intro|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:자신을 소개해 주세요!" }}
+      {% for error in form.intro.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="buttons">
+      <a class="cp-button secondary cancel" href="{% url 'profile' user.id %}">취소</a>
+      <button class="cp-button" type="submit">완료</button>
+    </div>
+  </form>
+</main>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 1) 실제 id 확인: 반드시 id_profile_pic 이어야 합니다.
+  const input = document.getElementById('id_profile_pic');
+  const picDiv = document.getElementById('profilePic');
+  if (!input || !picDiv) return;
+
+  input.addEventListener('change', function() {
+    const file = this.files && this.files[0];
+    if (!file) return;
+
+    // FileReader 로 base64 데이터 URL 생성
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      // 2) div 배경 이미지를 바로 새로운 데이터 URL 로 대체
+      picDiv.style.backgroundImage = `url('${e.target.result}')`;
+    };
+    reader.readAsDataURL(file);
+  });
+});
+</script>
+{% endblock extra_js %}

@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     # 썸네일
     'imagekit',
+    # django-cleanup 은 모델 인스턴스가 삭제되거나 FileField/ImageField가 새 파일로 교체될 때 자동으로 이전 파일을 삭제해 줍니다.
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 SITE_ID = 1
@@ -68,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "allauth.account.middleware.AccountMiddleware",
+    'blog.middleware.ProfileSetupMiddleware',
 ]
 
 ROOT_URLCONF = 'blog_byjihun_project.urls'
@@ -147,7 +150,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_SIGNUP_REDIRECT_URL = 'index'
+ACCOUNT_SIGNUP_REDIRECT_URL = 'profile-set'
 LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'account_login'
 ACCOUNT_LOGOUT_ON_GET = True
@@ -160,7 +163,7 @@ ACCOUNT_SIGNUP_FIELDS = [
 ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 1209600  # 14일
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 PASSWORD_RESET_TIMEOUT = 60 * 60 * 24 * 3
 ACCOUNT_EMAIL_SUBJECT_PREFIX = '[www.jjakggung.com] '
@@ -192,4 +195,9 @@ CKEDITOR_5_CONFIGS = {
     }
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'hajihun76@gmail.com'
+EMAIL_HOST_PASSWORD = 'ccbn ugsh wpqu izvs'

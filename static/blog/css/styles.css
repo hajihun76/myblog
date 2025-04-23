@@ -21,6 +21,27 @@ body {
   padding-left: 17px;
 }
 
+.site-header.only-logo {
+  margin: 18px auto;
+}
+
+.site-header .content,
+.site-footer .content {
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.site-header .content {
+  display: flex;
+  height: 70px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-header .logo {
+  width: 110px;
+}
+
 .site-header.navbar {
   position: sticky;
   top: 0;
@@ -359,11 +380,6 @@ body > .site-body {
   margin-left: 9px;
 }
 
-.max-content-width {
-  max-width: var(--max-content-width);
-  width: 100%;
-}
-
 .pics_thumb {
   width: 200px;
   display: inline-block;
@@ -447,46 +463,183 @@ body > .site-body {
   color: #000;
 }
 
-.file-content {
-  padding: 1rem;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+/* profile-header */
+
+.profile-header {
+  margin-top: 150px;
+  padding: 46px 10px 60px;
+  border-bottom: 1px solid var(--main-header-border);
+  background-color: var(--main-header-background);
+  position: relative;
 }
 
-.file-row {
+.profile-header .content {
+  display: flex;
+  margin: 0 auto;
+  overflow: hidden;
+  align-items: center;
+}
+
+.profile-header .profile-pic {
+  flex-shrink: 0;
+  margin-right: 15px;
+}
+
+.profile-header .info {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.profile-header .username {
+  font-size: 22px;
+  margin: 7px 9px;
+}
+
+.profile-header .edit {
+  display: inline-block;
+  font-size: 15px;
+  color: var(--profile-header-edit);
+  margin-bottom: 16px;
+}
+
+.profile-header .edit:first-of-type {
+  margin-left: 9px;
+}
+
+.profile-header .intro {
+  margin: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.profile-header .info {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.profile-header .follow-section {
+  margin: auto 20px;
+  white-space: nowrap;
+}
+
+.profile-header .vert-divider {
+  margin: 0 12px;
+}
+
+.follow-button .cp-button {
+  width: 107px;
+  display: flex;
+  justify-content: center;
+}
+
+/* profile-form */
+
+.profile-form {
+  margin: 100px auto;
+  max-width: 440px;
+  width: 100%;
+}
+
+.profile-form .logo {
+  margin: auto;
+  width: 110px;
+}
+
+.profile-form .welcome-message {
+  margin: 5px auto 30px;
+  text-align: center;
+  font-size: 24px;
+  color: #fff;
+}
+
+.profile-form form > :not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.profile-form .profile {
   display: flex;
   align-items: center;
-  gap: 2rem;            /* 컬럼 간 간격 */
+  letter-spacing: -0.3px;
+  padding: 16px 24px;
+  border: 1px solid var(--file-content-border);
+  background-color: var(--file-content-background);
+  border-radius: 7px;
 }
 
-.file-col {
+.profile-form .profile .profile-pic {
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.profile-form .profile .file {
+  line-height: 2;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.profile-form .profile .file > input {
+  max-width: 240px;
+}
+
+.profile-form .content > textarea {
+  height: 188px;
+}
+
+.profile-form .buttons {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;          /* 레이블·이미지·파일명 간 간격 */
+  width: 100%;
 }
 
-.file-label {
-  font-weight: bold;
-  min-width: 4ch;       /* '현재:' 같은 레이블 너비 고정 */
+.profile-form .buttons > button[type="submit"] {
+  flex-grow: 4;
 }
 
-.preview-img {
-  max-width: 120px;
-  max-height: 80px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.profile-form .buttons > .cancel {
+  flex-grow: 1;
 }
 
-.file-name {
-  color: #555;
-  font-size: 0.9rem;
+.profile-form .buttons > :not(:last-child) {
+  margin-right: 9px;
 }
 
-/* Django 기본 current/change 텍스트 감춤 */
-.clearable-file-input,
-.clearable-file-input + label,
-.clearable-file-input + .file-input {
-  display: none !important;
+.cp-chip {
+  display: inline-block;
+  padding: 0 17px;
+  font-size: 15px;
+  line-height: 32px;
+  color: var(--chip-text);
+  border: 1px solid var(--chip-border);
+  border-radius: 9999px;
+}
+
+/* Avatar */
+
+.cp-avatar {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--avatar-placeholder);
+  background-size: cover;
+  background-position: center;
+}
+
+.cp-avatar.large {
+  width: 100px;
+  height: 100px;
+}
+
+.cp-avatar.medium {
+  width: 60px;
+  height: 60px;
+}
+
+.profile-header .follow-section {
+  margin: auto 20px;
+  white-space: nowrap;
+}
+
+.follow-section a {
+  color: #000;
 }

@@ -8,6 +8,7 @@
   --link: #fff;
   --site-footer: #bcb9b0;
   --site-footer-background: #2f2c28;
+  --site-header-background: rgba(255, 255, 255, 0.76);
   --max-content-width: 1000px;
   --input-background: #fff;
   --input-border: #cccac3;
@@ -27,6 +28,13 @@
   --max-content-width: 1000px;
   --file-content-border: #cccac3;
   --file-content-background: #fff;
+  --profile-header-edit: #7b776b;
+  --main-header-border: #f0efec;
+  --main-header-background: #fff;
+  --profile-header-edit: #7b776b;
+  --avatar-placeholder: #e3e1dc;
+  --chip-border: #e3e1dc;
+  --chip-text: #2f2c28;
 }
 
 div.cp-input {

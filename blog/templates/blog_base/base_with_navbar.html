@@ -12,12 +12,12 @@
       {% if user.is_authenticated %}
         <li><a href="{% url "account_change_password" %}">비밀번호 변경</a></li>
         <li><a href="{% url "account_logout" %}">로그아웃</a></li>
+        <li><a href="{% url "profile" user.id %}">내 프로필</a></li>
       {% else %}
         <li><a href="{% url "account_login" %}">로그인</a></li>
         <li><a href="{% url "account_signup" %}">회원가입</a></li>
       {% endif %}
       <li><a href="#">관리자</a></li>
-      <li><a href="#">내 프로필</a></li>
     </ul>
   </nav>
 </div>

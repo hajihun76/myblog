@@ -4,22 +4,44 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from allauth.account.views import PasswordChangeView
 from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from .models import User, Post, PostList, PostListPics
-from .forms import PostForm, PostListForm, PostListPicsForm
+from .forms import PostForm, PostListForm, PostListPicsForm, ProfileForm
 
 # 기본 Allauth
 def index(request):
     return render(request, 'blog/index.html')
 
-class CustomPasswordChangeView(PasswordChangeView):
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     def get_success_url(self):
-        return reverse('index')
+        return reverse('account_reset_password_from_key_done')
     
 # 프로필 뷰
 class ProfileView(DetailView):
     model = User
-    template_name = 'blog/profile.html'
+    template_name = 'blog/profile/profile.html'
     pk_url_kwarg = 'user_id'
     context_object_name = 'profile_user'
+
+class ProfileSetView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = ProfileForm
+    template_name = 'blog/profile/profile_set_form.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+    
+    def get_success_url(self):
+        return reverse('index')
+    
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = ProfileForm
+    template_name = 'blog/profile/profile_update_form.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+    
+    def get_success_url(self):
+        return reverse('profile', kwargs={'user_id': self.request.user.id})
 
 
 # 갤러리 목록

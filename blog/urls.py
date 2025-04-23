@@ -5,7 +5,9 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     # 프로필 페이지
+    path('set-profile/', views.ProfileSetView.as_view(), name='profile-set'),
     path('users/<int:user_id>/', views.ProfileView.as_view(), name='profile'),
+    path('edit-profile/', views.ProfileUpdateView.as_view(), name='profile-update'),
 
     # 갤러리 목록 CRUD
     path('gallery/lists/', views.GalleryListView.as_view(), name='gallery_list'),

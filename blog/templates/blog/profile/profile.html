@@ -1,0 +1,55 @@
+{% extends "blog_base/base_with_navbar.html" %}
+{% load static %}
+
+{% block title %}Gallery{% endblock title %}
+
+{% block content %}
+<main class="site-body">
+  <div class="profile-header">
+    <div class="content max-content-width">
+      <div class="cp-avatar large profile-pic" style="background-image: url('{{ profile_user.profile_pic.url }}')"></div>
+      <div class="info">
+        <h1 class="username">{{ profile_user.nickname }}</h1>
+        {% if profile_user == user %}
+          <a class="edit" href="{% url "profile-update" %}">
+            <img class="cp-icon small" src="{% static 'blog/images/ic-pen.svg' %}" alt="Pen Icon">
+            프로필 수정
+          </a>
+          &#183;
+          <a class="edit" href="{% url 'account_change_password' %}">
+            비밀번호 변경
+          </a>
+        {% endif %}
+        {% if profile_user.intro %}
+          <div>
+            <p class="cp-chip intro">{{ profile_user.intro }}</p>
+          </div>
+        {% endif %}
+      </div>
+      <div class="follow-section">
+        <a href="#">
+          팔로워
+        </a>
+        <span class="vert-divider">|</span>
+        <a href="#">
+          팔로잉
+        </a>
+      </div>
+      {% if user.is_authenticated and user != profile_user %}
+        <form class="follow-button" action="{% url "process-follow" profile_user.id %}" method="post">
+          {% csrf_token %}
+          {% if is_following %}
+            <button class="cp-button small secondary" type="submit">
+              언팔로우
+            </button>
+          {% else %}
+            <button class="cp-button small" type="submit">
+              팔로우
+            </button>
+          {% endif %}
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</main>
+{% endblock content %}
