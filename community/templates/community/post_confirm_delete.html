@@ -1,0 +1,30 @@
+{% extends "blog_base/base_with_navbar.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'community/css/navbar_override.css' %}">
+{% endblock extra_head %}
+
+{% block title %}게시글 삭제 | 자유게시판{% endblock title %}
+
+{% block content %}
+<!-- ✅ Bootstrap 5 CDN (한번만 로드되게 상위 템플릿에 넣는 것이 이상적입니다) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<main class="container d-flex justify-content-center align-items-center py-5" style="min-height: 70vh;">
+  <div class="bg-dark text-white p-5 rounded shadow-sm w-100" style="max-width: 720px;">
+    <h4 class="text-danger mb-4">⚠ 정말 이 게시글을 삭제하시겠어요?</h4>
+    <p class="mb-3">
+      <strong>{{ object.title }}</strong><br>
+      <span class="text-secondary small">작성자: {{ object.author.nickname }} | {{ object.created_at|date:"Y.m.d H:i" }}</span>
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="d-flex justify-content-between">
+        <a href="{% url 'community_detail' post_id=object.pk %}" class="btn btn-outline-light">취소</a>
+        <button type="submit" class="btn btn-danger">삭제</button>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock content %}

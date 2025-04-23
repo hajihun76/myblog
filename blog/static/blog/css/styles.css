@@ -31,6 +31,10 @@ body {
   padding: 0 10px;
 }
 
+.site-footer {
+  margin-top: auto;
+}
+
 .site-header .content {
   display: flex;
   height: 70px;
@@ -112,7 +116,7 @@ a:focus {
 }
 
 body > .site-body {
-  flex: 1 1;
+  flex: 1 0 auto;
 }
 
 .container {

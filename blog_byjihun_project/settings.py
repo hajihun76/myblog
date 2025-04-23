@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     # 사용자 앱
     'blog',
+    'community',
     # 폼 속성 변경
     'widget_tweaks',
     # auth 인증관련 앱

@@ -1,7 +1,6 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
-from django_ckeditor_5.fields import CKEditor5Field
 from django.utils import timezone
 from django.core.files.base import ContentFile
 from PIL import Image, ExifTags
@@ -9,7 +8,7 @@ from PIL.TiffImagePlugin import IFDRational
 from io import BytesIO
 import os
 from PIL import Image
-from .validators import validate_no_special_characters, validate_place_link
+from .validators import validate_no_special_characters
 
 class User(AbstractUser):
     nickname = models.CharField(
@@ -199,16 +198,3 @@ class PostListPics(models.Model):
 
     def __str__(self):
         return f'Image for {self.post_list.title}'
-
-class Post(models.Model):
-    title = models.CharField(max_length=100)
-    place = models.CharField(max_length=50, null=True, blank=True)
-    place_link = models.URLField(validators=[validate_place_link], blank=True)
-    content = CKEditor5Field(config_name='default')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.title

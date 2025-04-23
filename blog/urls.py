@@ -23,10 +23,4 @@ urlpatterns = [
 
     # PostList 갤러리 상세 페이지
     path('posts/lists/<int:post_list_id>/pics/<int:pics_id>/', views.PostPicsDetailView.as_view(), name='post_pics_detail'),
-
-    # 맛집, 여행지 목록
-    path('tour/lists/', views.TourListView.as_view(), name='tour_list'),
-
-    # Community 게시판
-    path('community/', views.CommunityListView.as_view(), name='community_list'),
 ]

@@ -1,0 +1,36 @@
+/* 커뮤니티 전용 네비게이션 스타일 (blog 기본 구조를 덮어씀) */
+
+header.site-header {
+  background-color: transparent !important;
+}
+
+header.site-header nav ul.navbar {
+  margin-top: 8px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+header.site-header nav ul.navbar li a {
+  color: #ffffff !important;
+  font-weight: 500;
+  font-size: 15px;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+header.site-header nav ul.navbar li a:hover {
+  color: #cccccc !important;
+}
+
+header.site-header .logo {
+  height: 40px;
+}
+
+.logo {
+  padding-top: 0px;
+  margin-right: 50px;
+  height: 150px !important;
+  object-fit: contain;
+}

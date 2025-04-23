@@ -1,0 +1,118 @@
+{% extends "blog_base/base_with_navbar.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'community/css/navbar_override.css' %}">
+{% endblock extra_head %}
+
+{% block title %}{{ post.title }} | 자유게시판{% endblock title %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<main class="container-lg py-5" style="max-width: 960px;">
+
+  <!-- ✅ 제목 + 메타 정보 카드 -->
+  <div class="bg-dark text-white rounded shadow-sm p-4 mb-4">
+    <h2 class="fw-bold">{{ post.title }}</h2>
+    <div class="small text-secondary mt-2">
+      작성자: {{ post.author.nickname }} |
+      작성일: {{ post.created_at|date:"Y.m.d H:i" }} |
+      조회수: {{ post.views }}
+    </div>
+  </div>
+
+  <!-- ✅ 내용 카드 -->
+  <div class="bg-light rounded p-4 mb-4">
+    <div class="text-dark">
+      {{ post.content|linebreaksbr }}
+    </div>
+  </div>
+
+  <!-- ✅ 버튼 영역 -->
+  <div class="d-flex justify-content-between mb-5">
+    <a href="{% url 'community_list' %}" class="btn btn-outline-light">← 목록으로</a>
+    {% if user == post.author %}
+    <div class="d-flex gap-2">
+      <a href="{% url 'community_update' post.id %}" class="btn btn-outline-warning">수정</a>
+      <a href="{% url 'community_delete' post.id %}" class="btn btn-outline-danger">삭제</a>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ✅ 댓글 섹션 -->
+  <section class="mb-5">
+    <h5 class="text-light mb-3">💬 댓글 {{ post.comments.count }}개</h5>
+
+    {% for comment in comments %}
+      {% if not comment.parent %}
+      <div class="border rounded bg-dark text-white p-3 mb-3">
+        <div class="d-flex justify-content-between small">
+          <span>{{ comment.author.nickname }} | {{ comment.created_at|date:"Y.m.d H:i" }}</span>
+          {% if user == comment.author %}
+            <span>
+              <a href="{% url 'comment_update' comment.id %}" class="text-warning me-2">수정</a>
+              <a href="{% url 'comment_delete' comment.id %}" class="text-danger">삭제</a>
+            </span>
+          {% endif %}
+        </div>
+        <div class="mt-2">{{ comment.content|linebreaks }}</div>
+
+        <!-- ✅ 대댓글 목록 -->
+        {% for reply in comment.replies.all %}
+          <div class="bg-secondary text-white mt-3 ms-3 p-2 rounded">
+            <div class="d-flex justify-content-between small">
+              <span>↳ {{ reply.author.nickname }} | {{ reply.created_at|date:"Y.m.d H:i" }}</span>
+              {% if user == reply.author %}
+                <span>
+                  <a href="{% url 'comment_update' reply.id %}" class="text-warning me-2">수정</a>
+                  <a href="{% url 'comment_delete' reply.id %}" class="text-danger">삭제</a>
+                </span>
+              {% endif %}
+            </div>
+            <div class="mt-2">{{ reply.content|linebreaks }}</div>
+          </div>
+        {% endfor %}
+
+        <!-- ✅ 대댓글 폼 toggle -->
+        <a href="#" class="text-info small mt-2 d-inline-block reply-toggle" data-id="{{ comment.id }}">↪ 답글</a>
+
+        <form method="post" action="{% url 'comment_create' post.id %}" class="mt-2 d-none reply-form" id="reply-form-{{ comment.id }}">
+          {% csrf_token %}
+          <input type="hidden" name="parent_id" value="{{ comment.id }}">
+          <textarea name="content" rows="2" class="form-control mb-2" placeholder="답글을 입력하세요."></textarea>
+          <button type="submit" class="btn btn-sm btn-outline-light">답글 작성</button>
+        </form>
+      </div>
+      {% endif %}
+    {% empty %}
+      <p class="text-secondary">댓글이 없습니다.</p>
+    {% endfor %}
+  </section>
+
+  <!-- ✅ 일반 댓글 작성 폼 -->
+  {% if user.is_authenticated %}
+    <form method="post" class="mt-4">
+      {% csrf_token %}
+      {{ comment_form }}
+      <button type="submit" class="btn btn-outline-light mt-2">댓글 작성</button>
+    </form>
+  {% else %}
+    <p class="text-muted mt-3">댓글 작성을 위해 <a href="{% url 'account_login' %}">로그인</a> 해주세요.</p>
+  {% endif %}
+
+</main>
+
+<!-- ✅ 대댓글 toggle용 JS -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.reply-toggle').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const form = document.getElementById('reply-form-' + this.dataset.id);
+        form.classList.toggle('d-none');
+      });
+    });
+  });
+</script>
+{% endblock content %}

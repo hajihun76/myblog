@@ -3,8 +3,8 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from allauth.account.views import PasswordChangeView
 from braces.views import LoginRequiredMixin, UserPassesTestMixin
-from .models import User, Post, PostList, PostListPics
-from .forms import PostForm, PostListForm, PostListPicsForm, ProfileForm
+from .models import User, PostList, PostListPics
+from .forms import PostListForm, PostListPicsForm, ProfileForm
 
 # 기본 Allauth
 def index(request):
@@ -196,32 +196,3 @@ class PostListPicsDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView
     def test_func(self, user):
         pic = self.get_object()
         return pic.author == user
-
-# 맛집 여행 목록
-class TourListView(ListView):
-    model = Post
-    template_name = 'blog/tour/tour_list.html'
-    context_object_name = 'posts'
-    paginate_by = 10
-    ordering = ['-created_at']
-
-# Community 게시판
-class CommunityListView(ListView):
-    model = Post
-    template_name = 'blog/community/community_list.html'
-    context_object_name = 'posts'
-    paginate_by = 10
-    ordering = ['-created_at']
-
-# class PostCreateView(CreateView):
-#     model = Post
-#     form_class = PostForm
-#     template_name = 'blog/post_form.html'
-
-#     def form_valid(self, form):
-#         form.instance.author = self.request.user
-#         return super().form_valid(form)
-    
-#     def get_success_url(self):
-#         return reverse('post_detail', kwargs={'post_id': self.object.id})
-

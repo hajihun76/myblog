@@ -1,13 +1,5 @@
 from django import forms
-from django_ckeditor_5.widgets import CKEditor5Widget
-from .models import User, Post, PostList, PostListPics
-
-class PostForm(forms.ModelForm):
-    content = forms.CharField(label='본문', widget=CKEditor5Widget(config_name='default'))
-
-    class Meta:
-        model = Post
-        fields = ['title', 'place', 'place_link', 'content']
+from .models import User, PostList, PostListPics
 
 class PostListForm(forms.ModelForm):
     created_at = forms.DateField(label='작성일', widget=forms.DateInput(attrs={'type': 'date'}))
