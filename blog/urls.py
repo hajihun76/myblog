@@ -4,6 +4,9 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
 
+    # 프로필 페이지
+    path('users/<int:user_id>/', views.ProfileView.as_view(), name='profile'),
+
     # 갤러리 목록 CRUD
     path('gallery/lists/', views.GalleryListView.as_view(), name='gallery_list'),
     path('posts/lists/new/', views.PostListCreateView.as_view(), name='post_list_create'),

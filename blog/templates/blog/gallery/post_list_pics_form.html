@@ -16,18 +16,35 @@
     </div>
     <div class="file">
       <div class="file-content">
-        <div>  
-          {{ form.image }}
+        <div class="thumb_js">
+          {% if object.image %}
+          <img
+            src="{{ object.image.url }}"
+            alt="현재 이미지"
+            class="preview-img"
+            style="
+              display: block;
+              margin-bottom: 8px;
+              max-width:120px;
+              border:1px solid #ccc;
+              border-radius:4px;
+              object-fit:cover;
+            "
+          >
+        {% endif %}
+          <label for="id_image"></label><br>
+          {{ form.image|add_class:"cp-input file-input"|attr:"id:id_image"|attr:"accept:image/*" }}
           {% for error in form.image.errors %}
             <div class="error-message">{{ error }}</div>
           {% endfor %}
+          <img id="image-preview" src="" alt="미리보기" style="display:none; margin-top:8px; max-width:120px; border:1px solid #ccc; border-radius:4px; object-fit:cover;">
         </div>
       </div>
     </div>
     <div class="buttons">
       <a 
         class="cp-button secondary cancel" 
-        href="{% url "post_list_detail" object.post_list.id %}"
+        href="{% url 'post_list_detail' post_list.id %}"
       >
         취소
       </a>
@@ -36,3 +53,26 @@
   </form>
 </main>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const fileInput = document.getElementById('id_image');
+  const previewImg = document.getElementById('image-preview');
+  if (!fileInput || !previewImg) return;
+
+  fileInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) {
+      previewImg.style.display = 'none';
+      previewImg.src = '';
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    previewImg.style.display = 'block';
+    previewImg.onload = () => URL.revokeObjectURL(url);
+  });
+});
+</script>
+{% endblock extra_js %}

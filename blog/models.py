@@ -20,6 +20,10 @@ class User(AbstractUser):
         error_messages={'unique': '이미 사용중인 닉네임입니다.'},
     )
 
+    profile_pic = models.ImageField(default='default_profile_pic.jpg', upload_to='profile_pics')
+
+    intro = models.CharField(max_length=60, blank=True)
+
     def __str__(self):
         return self.email
 
@@ -36,6 +40,33 @@ class PostList(models.Model):
     
     def get_absolute_url(self):
         return reverse('post_list_detail', kwargs={'post_list_id': self.id})
+    
+    def save(self, *args, **kwargs):
+        # 1) 사용자가 올린 이미지를 self.thumb.file 에서 바로 읽어들임
+        uploaded_file = self.thumb
+
+        if uploaded_file:
+            # 메모리에서 이미지 열기
+            img = Image.open(uploaded_file)
+            # 썸네일 비율 유지, 너비 200px
+            img.thumbnail((200, 9999), Image.LANCZOS)
+
+            # 메모리 버퍼에 JPEG로 저장
+            thumb_io = BytesIO()
+            img.save(thumb_io, format='JPEG', quality=70)
+
+            # 원래 파일명을 유지
+            base_name = os.path.basename(uploaded_file.name)
+
+            # self.thumb 파일 객체를 덮어씀
+            self.thumb.save(
+                base_name,
+                ContentFile(thumb_io.getvalue()),
+                save=False  # 아직 DB 반영하지 않음
+            )
+
+        # 2) 최종적으로 DB에 한 번만 저장
+        super().save(*args, **kwargs)
 
 class PostListPics(models.Model):
     post_list = models.ForeignKey(
@@ -76,29 +107,26 @@ class PostListPics(models.Model):
         return value
 
     def save(self, *args, **kwargs):
-        # 1 원본 저장
+        # 1) 원본 저장 (update든 create든)
         super().save(*args, **kwargs)
 
-        # 2 thumbnail이 비어 있으면 생성
-        if self.image and not self.thumbnail:
-            # 원본 파일 열기
+        # 2) 항상 썸네일 재생성
+        if self.image:
             img = Image.open(self.image.path)
-            # 비율 유지하며 썸네일 크기 지정 (예: 최대 200×200)
             img.thumbnail((200, 9999), Image.LANCZOS)
 
-            # 메모리 버퍼에 JPEG로 저장
             thumb_io = BytesIO()
             img.save(thumb_io, format='JPEG', quality=70)
 
-            # 원본 파일명 가져오기
-            base_name = os.path.basename(self.image.name)
-            # 썸네일 필드에 저장 (물리 파일 생성)
+            base, ext = os.path.splitext(os.path.basename(self.image.name))
+            thumb_name = f"{base}{ext}"
+
+            # 덮어쓰기
             self.thumbnail.save(
-                base_name,
+                thumb_name,
                 ContentFile(thumb_io.getvalue()),
                 save=False
             )
-            # thumbnail 필드만 업데이트
             super().save(update_fields=['thumbnail'])
 
         # 2) EXIF 추출 및 JSON 변환

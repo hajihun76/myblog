@@ -436,3 +436,57 @@ body > .site-body {
   height: auto;
   border-radius: 2px;             /* 이미지 자체 모서리 약간 둥글게 */
 }
+
+.thumb_js {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.thumb_js a {
+  color: #000;
+}
+
+.file-content {
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 2rem;            /* 컬럼 간 간격 */
+}
+
+.file-col {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;          /* 레이블·이미지·파일명 간 간격 */
+}
+
+.file-label {
+  font-weight: bold;
+  min-width: 4ch;       /* '현재:' 같은 레이블 너비 고정 */
+}
+
+.preview-img {
+  max-width: 120px;
+  max-height: 80px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.file-name {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* Django 기본 current/change 텍스트 감춤 */
+.clearable-file-input,
+.clearable-file-input + label,
+.clearable-file-input + .file-input {
+  display: none !important;
+}

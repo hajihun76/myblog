@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from allauth.account.views import PasswordChangeView
 from braces.views import LoginRequiredMixin, UserPassesTestMixin
-from .models import Post, PostList, PostListPics
+from .models import User, Post, PostList, PostListPics
 from .forms import PostForm, PostListForm, PostListPicsForm
 
 # 기본 Allauth
@@ -13,6 +13,14 @@ def index(request):
 class CustomPasswordChangeView(PasswordChangeView):
     def get_success_url(self):
         return reverse('index')
+    
+# 프로필 뷰
+class ProfileView(DetailView):
+    model = User
+    template_name = 'blog/profile.html'
+    pk_url_kwarg = 'user_id'
+    context_object_name = 'profile_user'
+
 
 # 갤러리 목록
 class GalleryListView(ListView):
@@ -69,6 +77,14 @@ class PostListUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'blog/gallery/post_list_form.html'
     pk_url_kwarg = 'post_list_id'
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # URL kwargs에서 post_list_id를 빼와 원본 PostList 객체 조회
+        ctx['post_list'] = get_object_or_404(
+            PostList, pk=self.kwargs['post_list_id']
+        )
+        return ctx
+
     # 익명(unauthenticated) 사용자도 403을 받도록
     redirect_unauthenticated_users = False
     # 인증됐는데 test_func()를 통과 못 하면 403을 띄움
@@ -103,6 +119,15 @@ class PostListPicsCreateView(LoginRequiredMixin, CreateView):
     form_class = PostListPicsForm
     template_name = 'blog/gallery/post_list_pics_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # URL에 있는 post_list_id 로 PostList 가져오기
+        post_list = get_object_or_404(
+            PostList, pk=self.kwargs['post_list_id']
+        )
+        context['post_list'] = post_list
+        return context
+
     def form_valid(self, form):
         form.instance.post_list_id = self.kwargs['post_list_id']
         form.instance.author = self.request.user
@@ -116,6 +141,14 @@ class PostListPicsUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView
     form_class = PostListPicsForm
     template_name = 'blog/gallery/post_list_pics_form.html'
     pk_url_kwarg = 'pics_id'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # URL kwargs에서 post_list_id를 빼와 원본 PostList 객체 조회
+        ctx['post_list'] = get_object_or_404(
+            PostList, pk=self.kwargs['post_list_id']
+        )
+        return ctx
 
     redirect_unauthenticated_users = False
     raise_exception = True
