@@ -3,6 +3,7 @@ from allauth.account.views import LoginView, SignupView
 from django.shortcuts import redirect
 from blog.utils.device import is_mobile_request
 from django.urls import reverse
+from django.views.generic import TemplateView
 
 
 class CustomLoginView(LoginView):
@@ -42,3 +43,6 @@ class CustomSignupView(SignupView):
         if not user.has_perm('busorder.can_access_busorder'):
             return reverse('permission_pending')
         return '/busorder/'
+    
+class PermissionPendingView(TemplateView):
+    template_name = 'accounts/permission_pending.html'

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>월별 순번 통계</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-dark text-white">
+  <div class="container py-5">
+    <h2 class="text-center mb-4">📈 월별 순번 통계</h2>
+    <canvas id="statsChart" width="400" height="300"></canvas>
+    <div class="text-center mt-4">
+      <a href="{% url 'busorder:main' %}" class="btn btn-outline-light">← 돌아가기</a>
+    </div>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('statsChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [{% for item in monthly_counts %}"{{ item.month|date:'Y-m' }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+          label: '순번 조회 수',
+          data: [{% for item in monthly_counts %}{{ item.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        }]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
