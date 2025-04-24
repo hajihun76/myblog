@@ -7,6 +7,9 @@ from collections import Counter
 from django.utils import timezone
 from .models import BusQueryLog
 from django.db.models import Q  # ✅ 검색용 추가
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
+
 
 # 기준 순번 리스트 (2025년 5월 1일 기준)
 BASE_ORDER = [
