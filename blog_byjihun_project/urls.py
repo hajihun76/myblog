@@ -45,6 +45,7 @@ urlpatterns = [
     # 모바일용
     path("jjakggung/login/", CustomLoginView.as_view(), name="account_login"),
     path("jjakggung/signup/", CustomSignupView.as_view(), name="account_signup"),
+    path("permission-pending/", TemplateView.as_view(template_name="accounts/permission_pending.html"), name="permission_pending"),
 ]
 
 # 개발 중에만 media 파일을 서빙하도록

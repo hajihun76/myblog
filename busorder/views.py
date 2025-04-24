@@ -125,3 +125,9 @@ def stats_view(request):
 
 def permission_denied_view(request, exception=None):
     return render(request, "busorder/403.html", status=403)
+
+class BusOrderMainView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.has_perm('busorder.can_access'):  # 또는 사용자 필드 검사
+            return render(request, 'busorder/permission_pending.html')  # 별도 템플릿
+        return render(request, 'busorder/main.html')
