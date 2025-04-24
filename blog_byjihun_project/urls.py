@@ -40,8 +40,11 @@ urlpatterns = [
     path('password/change/', CustomPasswordChangeView.as_view(), name='account_password_change'),
     path('', include('allauth.urls')),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
+    path('busorder/', include('busorder.urls')),
 ]
 
 # 개발 중에만 media 파일을 서빙하도록
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler403 = "busorder.views.permission_denied_view"

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>조회 기록</title>
+  <!-- Pretendard 웹폰트 CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light p-5">
+
+<div class="container">
+  <h2 class="mb-4">📋 나의 버스 조회 기록</h2>
+  <table class="table table-dark table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>조회 날짜</th>
+        <th>버스 번호</th>
+        <th>조회 시각</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+      <tr>
+        <td>{{ log.date }}</td>
+        <td>{{ log.bus_number }}</td>
+        <td>{{ log.queried_at|date:"Y-m-d H:i:s" }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3" class="text-center">조회 기록이 없습니다.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'calendar-view' %}" class="btn btn-outline-light mt-3">← 순번 조회로 돌아가기</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>전체 조회 기록 (관리자)</title>
+  <!-- Pretendard 웹폰트 CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light p-5">
+<div class="container">
+  <h2 class="mb-4">👑 전체 사용자 조회 기록 (최근 100건)</h2>
+
+  <div class="mb-4">
+    <a href="{% url 'calendar-view' %}" class="btn btn-outline-light me-2">📅 순번 조회</a>
+    <a href="{% url 'query-logs' %}" class="btn btn-outline-light me-2">🧍 내 조회 기록</a>
+    <a href="{% url 'query-logs-all' %}" class="btn btn-outline-light me-2">👑 전체 기록</a>
+    <a href="{% url 'busorder-stats' %}" class="btn btn-outline-info">📊 월별 통계</a>
+  </div>
+
+  <!-- 🔍 필터 폼 -->
+<form method="get" class="row g-2 mb-4">
+  <div class="col-md-4">
+    <input type="date" name="date" class="form-control bg-secondary text-light border-0"
+          value="{{ request.GET.date }}">
+  </div>
+  <div class="col-md-4">
+    <input type="text" name="bus_number" class="form-control bg-secondary text-light border-0"
+          placeholder="버스 번호 4자리" value="{{ request.GET.bus_number }}">
+  </div>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-outline-info w-100">검색</button>
+  </div>
+</form>
+
+  <table class="table table-dark table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>사용자</th>
+        <th>조회 날짜</th>
+        <th>버스 번호</th>
+        <th>조회 시각</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+      <tr>
+        <td>{{ log.user.email }}</td>
+        <td>{{ log.date }}</td>
+        <td>{{ log.bus_number }}</td>
+        <td>{{ log.queried_at|date:"Y-m-d H:i:s" }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center">조회 기록이 없습니다.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{% url 'calendar-view' %}" class="btn btn-outline-light mt-3">← 순번 조회로 돌아가기</a>
+</div>
+
+</body>
+</html>

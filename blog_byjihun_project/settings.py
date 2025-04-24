@@ -43,8 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.sitemaps',
     # 사용자 앱
+    # 갤러리
     'blog',
+    # 게시판
     'community',
+    # 버스순번
+    'busorder.apps.BusorderConfig',
     # 폼 속성 변경
     'widget_tweaks',
     # auth 인증관련 앱
