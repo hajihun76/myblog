@@ -19,6 +19,7 @@ body {
 .logo{
   padding-top: 56px;
   padding-left: 17px;
+  width: 240px;
 }
 
 .site-header.only-logo {
