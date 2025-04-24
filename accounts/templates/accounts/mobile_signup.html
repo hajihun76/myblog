@@ -2,51 +2,66 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>회원가입</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입 - 7727순번</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       background-color: #121212;
-      color: #ffffff;
+      color: white;
       display: flex;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
-      padding: 1rem;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding-top: 40px;
     }
     .signup-box {
-      width: 100%;
-      max-width: 360px;
       background-color: #1e1e1e;
       padding: 2rem;
       border-radius: 1rem;
+      width: 100%;
+      max-width: 400px;
     }
     .form-control {
       background-color: #2c2c2c;
-      color: #fff;
+      color: white;
       border: none;
     }
+    .form-control::placeholder {
+      color: #888;
+    }
     .form-control:focus {
-      background-color: #3a3a3a;
-      color: #fff;
-      border-color: #6c757d;
+      background-color: #2c2c2c;
+      color: white;
     }
     .btn-primary {
-      background-color: #03a9f4;
+      background-color: #007bff;
       border: none;
     }
   </style>
 </head>
 <body>
   <div class="signup-box">
-    <h2 class="mb-4 text-center">회원가입</h2>
+    <h2 class="text-center mb-4">회원가입</h2>
+
+    {% if form.errors %}
+      <div class="alert alert-danger" role="alert">
+        입력한 정보를 다시 확인해주세요.
+      </div>
+    {% endif %}
+
     <form method="post" action="{% url 'account_signup' %}">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="btn btn-primary w-100 mt-3">가입하기</button>
+      {{ form.email|as_widget:form.email.widget.attrs.update({'class': 'form-control mb-3', 'placeholder': '이메일'}) }}
+      {{ form.password1|as_widget:form.password1.widget.attrs.update({'class': 'form-control mb-3', 'placeholder': '비밀번호'}) }}
+      {{ form.password2|as_widget:form.password2.widget.attrs.update({'class': 'form-control mb-3', 'placeholder': '비밀번호 확인'}) }}
+      <button type="submit" class="btn btn-primary w-100">회원가입</button>
     </form>
+
+    <div class="text-center mt-3">
+      <a href="{% url 'account_login' %}" class="text-decoration-none text-light">이미 계정이 있으신가요?</a>
+    </div>
   </div>
 </body>
 </html>
