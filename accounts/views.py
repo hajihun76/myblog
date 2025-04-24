@@ -18,10 +18,11 @@ class CustomLoginView(LoginView):
         return response
     
     def get_success_url(self):
-        # 모바일에서 로그인한 경우에만 /busorder/로 이동
-        if is_mobile_request(self.request):
-            return reverse('/busorder/')  # 또는 '/busorder/'
-        return super().get_success_url()  # 일반 로그인은 기존 방식 유지
+        user = self.request.user
+        if user.is_authenticated and user.has_perm('busorder.can_access_busorder'):
+            return reverse('busorder:main')
+        else:
+            return reverse('permission_pending')
 
 
 class CustomSignupView(SignupView):
