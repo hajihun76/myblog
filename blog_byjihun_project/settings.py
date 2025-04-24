@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'community',
     # 버스순번
     'busorder.apps.BusorderConfig',
+    # 모바일 앱
+    'accounts',
     # 폼 속성 변경
     'widget_tweaks',
     # auth 인증관련 앱
