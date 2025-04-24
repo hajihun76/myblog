@@ -22,6 +22,7 @@ from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
 from blog.views import CustomPasswordChangeView
 from blog.sitemaps import PostListSitemap
+from accounts.views import CustomLoginView, CustomSignupView
 
 sitemaps = {
     'postlists': PostListSitemap,
@@ -41,6 +42,9 @@ urlpatterns = [
     path('', include('allauth.urls')),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
     path('busorder/', include('busorder.urls')),
+    # 모바일용
+    path("jjakggung/login/", CustomLoginView.as_view(), name="account_login"),
+    path("jjakggung/signup/", CustomSignupView.as_view(), name="account_signup"),
 ]
 
 # 개발 중에만 media 파일을 서빙하도록

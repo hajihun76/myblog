@@ -24,8 +24,4 @@ urlpatterns = [
 
     # PostList 갤러리 상세 페이지
     path('posts/lists/<int:post_list_id>/pics/<int:pics_id>/', views.PostPicsDetailView.as_view(), name='post_pics_detail'),
-
-    # 테스트용 삭제 요망
-    path('test-bootstrap/', TemplateView.as_view(template_name='test_bootstrap.html'), name='test_bootstrap'),
-    path('test-components/', TemplateView.as_view(template_name='test_components.html'), name='test_component'),
 ]

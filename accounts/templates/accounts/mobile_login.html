@@ -1,0 +1,60 @@
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>모바일 로그인</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #121212;
+        color: #fff;
+      }
+      .login-container {
+        max-width: 380px;
+        margin: 10vh auto;
+        padding: 2rem;
+        background-color: #1e1e1e;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <h3 class="text-center mb-4">로그인</h3>
+
+      {% if form.errors %}
+      <div class="alert alert-danger">
+        아이디 또는 비밀번호를 확인해주세요.
+      </div>
+      {% endif %}
+
+      <form method="post" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          {{ form.login.label_tag }}
+          {{ form.login|add_class:"form-control bg-dark text-white border-secondary" }}
+        </div>
+        <div class="mb-3">
+          {{ form.password.label_tag }}
+          {{ form.password|add_class:"form-control bg-dark text-white border-secondary" }}
+        </div>
+        <div class="form-check mb-3">
+          {{ form.remember }}
+          <label class="form-check-label" for="id_remember">로그인 상태 유지</label>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">로그인</button>
+      </form>
+
+      <hr class="border-light my-4" />
+      <div class="text-center">
+        <a href="{% url 'account_signup' %}" class="text-light">회원가입</a>
+      </div>
+    </div>
+  </body>
+</html>
