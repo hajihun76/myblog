@@ -19,24 +19,21 @@ class CustomLoginView(LoginView):
         user = self.request.user
         next_url = self.request.GET.get('next')
 
+        # ✅ 권한이 있는 경우 처리
         if user.is_authenticated and user.has_perm('busorder.can_access_busorder'):
-            # 모바일이면 busorder 메인으로, 아니면 권한 안내 페이지로
             if is_mobile_request(self.request):
-                return reverse('busorder:main')
-            return reverse('permission_pending')
-        
-        # ⚠️ 잘못된 next를 방지: 없거나 404 나는 경우 대비
+                return reverse('busorder:main')  # 모바일은 busorder 메인
+            return reverse('permission_pending')  # PC는 안내 페이지
+
+        # ✅ next가 유효하고 접근 가능한 URL인지 확인
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
             try:
-                resolve(next_url)  # 유효한 view인지 확인
+                resolve(next_url)  # URL이 실제로 존재하는지 확인
                 return next_url
             except:
-                pass  # 유효하지 않으면 무시
-        
-        # 그 외에는 next 값이 유효하면 리디렉션
-        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
-            return next_url
+                pass  # 유효하지 않으면 무시하고 fallback
 
+        # ✅ 기본 리디렉션 경로
         return settings.LOGIN_REDIRECT_URL
 
 
