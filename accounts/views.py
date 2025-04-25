@@ -4,15 +4,9 @@ from django.shortcuts import redirect
 from blog.utils.device import is_mobile_request
 from django.urls import reverse
 from django.views.generic import TemplateView
-from django.contrib.auth import login
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.conf import settings
-from django.utils.http import url_has_allowed_host_and_scheme
-from django.urls import reverse
-from django.views.generic import TemplateView
-from django.utils.http import url_has_allowed_host_and_scheme
-
-
+from django.urls import resolve
 
 
 class CustomLoginView(LoginView):
@@ -30,6 +24,14 @@ class CustomLoginView(LoginView):
             if is_mobile_request(self.request):
                 return reverse('busorder:main')
             return reverse('permission_pending')
+        
+        # ⚠️ 잘못된 next를 방지: 없거나 404 나는 경우 대비
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
+            try:
+                resolve(next_url)  # 유효한 view인지 확인
+                return next_url
+            except:
+                pass  # 유효하지 않으면 무시
         
         # 그 외에는 next 값이 유효하면 리디렉션
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
