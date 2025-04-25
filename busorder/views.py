@@ -163,7 +163,7 @@ class BusOrderMainView(LoginRequiredMixin, View):
         # ✅ 로그 저장
         BusOrderLog.objects.create(
             user=request.user,
-            selected_date=selected_date,
+            date=selected_date,
             bus_number=bus_number,
             queue_number=queue_number,
         )
