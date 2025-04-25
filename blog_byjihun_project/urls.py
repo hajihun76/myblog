@@ -47,7 +47,7 @@ urlpatterns = [
     path('busorder/', include('busorder.urls')),
     # 모바일용
     path("jjakggung/login/", CustomLoginView.as_view(), name="mobile_account_login"),
-    path("jjakggung/signup/", CustomSignupView.as_view(), name="mobile_signup"),
+    path("jjakggung/signup/", CustomSignupView.as_view(), name="mobile_account_signup"),
     path("permission-pending/", TemplateView.as_view(template_name="accounts/permission_pending.html"), name="permission_pending"),
     path('permission-pending/', PermissionPendingView.as_view(), name='permission_pending'),
     path('jjakggung/mobile-redirect/', views.ForceMobileRedirectView.as_view(), name='force_mobile_redirect'),
