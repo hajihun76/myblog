@@ -29,10 +29,10 @@
   <div class="d-flex justify-content-center gap-2 mt-4 mb-4">
     <!-- ✅ 로고 버튼 -->
     <a href="{% url 'index' %}" class="btn btn-outline-light">🧍 홈으로</a>
-    <a href="{% url 'query-logs' %}" class="btn btn-outline-light">🧍 내 조회 기록</a>
+    <a href="{% url 'busorder:query_logs' %}" class="btn btn-outline-light">🧍 내 조회 기록</a>
     {% if request.user.is_superuser %}
-    <a href="{% url 'query-logs-all' %}" class="btn btn-outline-warning">👑 전체 기록</a>
-    <a href="{% url 'busorder-stats' %}" class="btn btn-outline-info">📊 월별 통계</a>
+    <a href="{% url 'busorder:query_logs_all' %}" class="btn btn-outline-warning">👑 전체 기록</a>
+    <a href="{% url 'busorder:busorder_stats' %}" class="btn btn-outline-info">📊 월별 통계</a>
     {% endif %}
   </div>
 

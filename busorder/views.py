@@ -16,6 +16,12 @@ from blog.utils.device import is_mobile_request
 import random
 from django.db.models.functions import TruncMonth
 from django.utils.timezone import now
+from django.contrib.auth.models import User
+
+
+
+def has_busorder_permission(user):
+    return user.is_superuser or user.has_perm('busorder.can_access_busorder')
 
 
 # 기준 순번 리스트 (2025년 5월 1일 기준)
@@ -138,19 +144,14 @@ def permission_denied_view(request, exception=None):
 
 class BusOrderMainView(LoginRequiredMixin, View):
     def get(self, request):
-        # ✅ 권한 확인
-        if not request.user.has_perm('busorder.can_access_busorder'):
+        if not has_busorder_permission(request.user):
             return redirect('permission_pending')
-
-        # ✅ 모바일이면 모바일 메인 템플릿 렌더
         if is_mobile_request(request):
             return render(request, 'busorder/mobile_main.html')
-
-        # ✅ PC에서 접근한 경우 안내 페이지
         return render(request, 'busorder/desktop_block.html')
     
     def post(self, request):
-        if not request.user.has_perm('busorder.can_access_busorder'):
+        if not has_busorder_permission(request.user):
             return redirect('permission_pending')
 
         selected_date = request.POST.get('selected_date')
@@ -202,7 +203,7 @@ class BusOrderAPI(View):
     
 class BusOrderHistoryView(LoginRequiredMixin, ListView):
     model = BusOrderLog
-    template_name = 'busorder/history.html'
+    template_name = 'busorder/admin_history.html'
     context_object_name = 'logs'
     ordering = ['-timestamp']
 
@@ -297,4 +298,6 @@ class QueryHistoryView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return BusOrderLog.objects.filter(user=self.request.user).order_by('-timestamp')
+    
+
     
