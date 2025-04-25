@@ -17,7 +17,7 @@ urlpatterns = [
 
     path('', BusOrderMainView.as_view(), name='main'),
     path('permission-pending/', PermissionPendingView.as_view(), name='permission_pending'),
-
+    path('jjakggung/mobile-redirect/', views.ForceMobileRedirectView.as_view(), name='force_mobile_redirect'),
     path('api/log/', BusOrderAPI.as_view(), name='api_log'),
 
     # ✅ 이름 충돌 정리

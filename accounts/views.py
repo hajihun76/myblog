@@ -2,11 +2,10 @@
 from allauth.account.views import LoginView, SignupView
 from django.shortcuts import redirect
 from blog.utils.device import is_mobile_request
-from django.urls import reverse
+from django.urls import reverse, resolve
 from django.views.generic import TemplateView
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.conf import settings
-from django.urls import resolve
 
 
 class CustomLoginView(LoginView):
@@ -14,6 +13,16 @@ class CustomLoginView(LoginView):
         if is_mobile_request(self.request):
             return ['accounts/mobile_login.html']
         return ['account/login.html']
+    
+    def form_valid(self, form):
+        """모바일 로그인 직후, 정상 리디렉션 강제"""
+        response = super().form_valid(form)
+
+        if is_mobile_request(self.request):
+            # 여기서 강제로 리디렉션 응답을 바꿔버린다
+            return redirect('force_mobile_redirect')
+
+        return response
 
     def get_success_url(self):
         user = self.request.user
