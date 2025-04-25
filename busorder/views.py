@@ -297,3 +297,4 @@ class QueryHistoryView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return BusOrderLog.objects.filter(user=self.request.user).order_by('-timestamp')
+    
