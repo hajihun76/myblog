@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container py-5">
+    <h3>내 조회 이력</h3>
+    <ul class="list-group">
+      {% for log in logs %}
+        <li class="list-group-item">
+          {{ log.timestamp }} - {{ log.selected_date }} - {{ log.bus_number }} → 순번: {{ log.queue_number }}
+        </li>
+      {% empty %}
+        <li class="list-group-item">조회 이력이 없습니다.</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

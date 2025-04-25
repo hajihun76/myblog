@@ -289,3 +289,11 @@ class MyBusOrderHistoryView(View):
         return render(request, 'busorder/my_history.html', {
             'logs': logs
         })
+    
+class QueryHistoryView(LoginRequiredMixin, ListView):
+    model = BusOrderLog
+    template_name = 'busorder/query_history.html'
+    context_object_name = 'logs'
+
+    def get_queryset(self):
+        return BusOrderLog.objects.filter(user=self.request.user).order_by('-timestamp')

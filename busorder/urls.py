@@ -18,4 +18,5 @@ urlpatterns = [
     path('stats/monthly/', views.BusOrderMonthlyStatsView.as_view(), name='monthly_stats'),
     path('monthly-stats/', MonthlyStatsView.as_view(), name='monthly_stats'),
     path('my-history/', MyBusOrderHistoryView.as_view(), name='history'),
+    path('history/', views.QueryHistoryView.as_view(), name='query-logs'), 
 ]
