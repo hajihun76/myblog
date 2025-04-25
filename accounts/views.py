@@ -6,6 +6,12 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 from django.contrib.auth import login
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.conf import settings
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.urls import reverse
+from django.views.generic import TemplateView
+from django.utils.http import url_has_allowed_host_and_scheme
+
 
 
 
