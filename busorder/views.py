@@ -157,8 +157,21 @@ class BusOrderMainView(LoginRequiredMixin, View):
         selected_date = request.POST.get('selected_date')
         bus_number = request.POST.get('bus_number')
 
-        # 순번 계산 (예: 사용자 ID를 기반으로)
-        queue_number = (request.user.id % 100) + 1
+        if not selected_date or not bus_number:
+            return redirect('busorder:main')  # 값이 없으면 다시 메인으로
+        
+        try:
+            year, month, day = map(int, selected_date.split('-'))
+            schedule = generate_schedule_across_months(BASE_ORDER, year, month)
+            bus_number_int = int(bus_number)
+            queue_number = get_order(schedule, selected_date, bus_number_int)
+        except Exception as e:
+            queue_number = -1
+
+        if queue_number == -1:
+            return render(request, 'busorder/mobile_main.html', {
+                'error_message': f"{selected_date}에 {bus_number}번 버스를 찾을 수 없습니다."
+            })
 
         # ✅ 로그 저장
         BusOrderLog.objects.create(
