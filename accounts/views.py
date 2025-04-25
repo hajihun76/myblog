@@ -3,7 +3,7 @@ from allauth.account.views import LoginView, SignupView
 from django.shortcuts import redirect
 from blog.utils.device import is_mobile_request
 from django.urls import reverse, resolve
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.conf import settings
 
@@ -66,3 +66,13 @@ class CustomSignupView(SignupView):
     
 class PermissionPendingView(TemplateView):
     template_name = 'accounts/permission_pending.html'
+
+class ForceMobileRedirectView(RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        user = self.request.user
+        if user.is_authenticated and user.has_perm('busorder.can_access_busorder'):
+            return reverse('busorder:main')
+        else:
+            return reverse('permission_pending')

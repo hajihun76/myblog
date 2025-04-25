@@ -24,7 +24,8 @@ from blog.views import CustomPasswordChangeView
 from blog.sitemaps import PostListSitemap
 from accounts.views import CustomLoginView, CustomSignupView
 from accounts.views import PermissionPendingView
-
+from accounts.views import ForceMobileRedirectView
+from accounts import views
 
 sitemaps = {
     'postlists': PostListSitemap,
@@ -49,6 +50,7 @@ urlpatterns = [
     path("jjakggung/signup/", CustomSignupView.as_view(), name="account_signup"),
     path("permission-pending/", TemplateView.as_view(template_name="accounts/permission_pending.html"), name="permission_pending"),
     path('permission-pending/', PermissionPendingView.as_view(), name='permission_pending'),
+    path('jjakggung/mobile-redirect/', views.ForceMobileRedirectView.as_view(), name='force_mobile_redirect'),
 ]
 
 # 개발 중에만 media 파일을 서빙하도록

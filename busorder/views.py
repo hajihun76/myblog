@@ -17,7 +17,6 @@ import random
 from django.db.models.functions import TruncMonth
 from django.utils.timezone import now
 from django.contrib.auth.models import User
-from django.urls import reverse
 
 
 
@@ -300,13 +299,3 @@ class QueryHistoryView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return BusOrderLog.objects.filter(user=self.request.user).order_by('-timestamp')
     
-
-class ForceMobileRedirectView(RedirectView):
-    permanent = False
-
-    def get_redirect_url(self, *args, **kwargs):
-        user = self.request.user
-        if user.is_authenticated and user.has_perm('busorder.can_access_busorder'):
-            return reverse('busorder:main')
-        else:
-            return reverse('permission_pending')
