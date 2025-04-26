@@ -150,31 +150,11 @@ class PostListPics(models.Model):
         # 1) 원본 저장 (update든 create든)
         super().save(*args, **kwargs)
 
-        # 2) 항상 썸네일 재생성
-        if self.image:
-            img = Image.open(self.image.path)
-            w, h = img.size
-            if w >= h:
-                img.thumbnail((200, 9999), Image.LANCZOS)
-            else:
-                img.thumbnail((9999, 200), Image.LANCZOS)
+        if not self.image:
+            return  # 이미지 없는 경우 종료
 
-            thumb_io = BytesIO()
-            img.save(thumb_io, format='JPEG', quality=70)
-
-            base, ext = os.path.splitext(os.path.basename(self.image.name))
-            thumb_name = f"{base}{ext}"
-
-            # 덮어쓰기
-            self.thumbnail.save(
-                thumb_name,
-                ContentFile(thumb_io.getvalue()),
-                save=False
-            )
-            super().save(update_fields=['thumbnail'])
-
-        # 2) EXIF 추출 및 JSON 변환
-        if self.image and not self.metadata:
+        # 2) EXIF 추출 (리사이즈 전에)
+        if not self.metadata:
             try:
                 img = Image.open(self.image.path)
                 raw_exif = img._getexif() or {}
@@ -183,19 +163,64 @@ class PostListPics(models.Model):
                     name = ExifTags.TAGS.get(tag_id, tag_id)
                     exif[name] = self._parse_exif_value(val)
 
-                # 필요한 키만 걸러내기
                 wanted = [
-                    'Make','Model','LensModel',
-                    'FNumber','ExposureTime','ISOSpeedRatings',
-                    'FocalLength','DateTimeOriginal'
+                    'Make', 'Model', 'LensModel',
+                    'FNumber', 'ExposureTime', 'ISOSpeedRatings',
+                    'FocalLength', 'DateTimeOriginal'
                 ]
                 filtered = {k: exif[k] for k in wanted if k in exif}
 
                 self.metadata = filtered
                 super().save(update_fields=['metadata'])
             except Exception as e:
-                # EXIF 파싱 실패 시 로깅
                 print("EXIF parsing error:", e)
+
+        # 3) 원본 리사이즈 후 WebP 저장
+        img = Image.open(self.image.path)
+        w, h = img.size
+
+        if w > h:
+            # 가로사진
+            if w > 1200:
+                img.thumbnail((1400, 9999), Image.LANCZOS)
+        else:
+            # 세로사진
+            if h > 800:
+                img.thumbnail((9999, 800), Image.LANCZOS)
+
+        img_io = BytesIO()
+        img.save(img_io, format='WEBP', quality=80)
+
+        # 파일 이름 강제 .webp로 변경
+        base_name, _ = os.path.splitext(os.path.basename(self.image.name))
+        webp_filename = f"{base_name}.webp"
+
+        self.image.save(
+            f'post_list_pics/original/{webp_filename}',
+            ContentFile(img_io.getvalue()),
+            save=False
+        )
+        super().save(update_fields=['image'])
+
+        # 4) 썸네일 생성 후 WebP 저장
+        img = Image.open(self.image.path)
+        w, h = img.size
+        if w >= h:
+            img.thumbnail((200, 9999), Image.LANCZOS)
+        else:
+            img.thumbnail((9999, 200), Image.LANCZOS)
+
+        thumb_io = BytesIO()
+        img.save(thumb_io, format='WEBP', quality=70)
+
+        thumb_name = f"{base_name}_thumb.webp"
+
+        self.thumbnail.save(
+            f'post_list_pics/thumbnails/{thumb_name}',
+            ContentFile(thumb_io.getvalue()),
+            save=False
+        )
+        super().save(update_fields=['thumbnail'])
 
     def __str__(self):
         return f'Image for {self.post_list.title}'
