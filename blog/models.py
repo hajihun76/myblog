@@ -181,15 +181,15 @@ class PostListPics(models.Model):
 
         if w > h:
             # 가로사진
-            if w > 1200:
+            if w > 1400:
                 img.thumbnail((1400, 9999), Image.LANCZOS)
         else:
             # 세로사진
-            if h > 800:
+            if h > 700:
                 img.thumbnail((9999, 700), Image.LANCZOS)
 
         img_io = BytesIO()
-        img.save(img_io, format='WEBP', quality=80)
+        img.save(img_io, format='WEBP', quality=100)
 
         # 파일 이름 강제 .webp로 변경
         base_name, _ = os.path.splitext(os.path.basename(self.image.name))
