@@ -181,12 +181,12 @@ class PostListPics(models.Model):
 
         if w > h:
             # 가로사진
-            if w > 1400:
-                img.thumbnail((1400, 9999), Image.LANCZOS)
+            if w > 1600:
+                img.thumbnail((1600, 9999), Image.LANCZOS)
         else:
             # 세로사진
-            if h > 800:
-                img.thumbnail((9999, 800), Image.LANCZOS)
+            if h > 1000:
+                img.thumbnail((9999, 1000), Image.LANCZOS)
 
         img_io = BytesIO()
         img.save(img_io, format='WEBP', quality=100)
