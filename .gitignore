@@ -1,0 +1,39 @@
+# Python 기본
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# Virtualenv (가상환경)
+venv/
+env/
+ENV/
+*.env
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+*.pot
+
+# VSCode 설정 파일 무시 (개인 환경설정)
+.vscode/
+
+# 기타 숨김 파일
+.DS_Store
+
+# 백업 파일
+*~
+
+# coverage, pytest 관련
+htmlcov/
+.coverage
+.pytest_cache/
+
+# 기타
+.idea/
+*.swp
