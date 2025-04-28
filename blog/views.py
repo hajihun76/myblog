@@ -1,18 +1,30 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from allauth.account.views import PasswordChangeView
 from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from .models import User, PostList, PostListPics
 from .forms import PostListForm, PostListPicsForm, ProfileForm
+from accounts.mixins import ModalLoginRequiredMixin
+from django.http import JsonResponse
+from django.contrib.auth import update_session_auth_hash
+
 
 # 기본 Allauth
 def index(request):
     return render(request, 'blog/index.html')
 
-class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
-    def get_success_url(self):
-        return reverse('account_reset_password_from_key_done')
+class AjaxPasswordChangeView(PasswordChangeView):
+    def form_valid(self, form):
+        user = form.save()
+        update_session_auth_hash(self.request, user)  # ✅ 로그인 유지!
+        return JsonResponse({'success': True})
+
+    def form_invalid(self, form):
+        errors = []
+        for field_errors in form.errors.values():
+            errors.extend(field_errors)
+        return JsonResponse({'success': False, 'errors': errors}, status=400)
     
 # 프로필 뷰
 class ProfileView(DetailView):
@@ -63,11 +75,20 @@ class PostPicsDetailView(DetailView):
         context['exif'] = self.object.metadata or {}
         return context
 
-class PostListPicsListView(LoginRequiredMixin, ListView):
+class PostListPicsListView(ModalLoginRequiredMixin, ListView):
     model = PostListPics
     template_name = 'blog/gallery/post_pics_detail.html'
     context_object_name = 'post_list_pics'
     pk_url_kwarg = 'post_list_id'
+    paginate_by = 15
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'authenticated': False}, status=401)
+            else:
+                return redirect('account_login')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -75,13 +96,12 @@ class PostListPicsListView(LoginRequiredMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # ① 부모 갤러리 객체를 넘겨 줍니다
         context['post_list'] = get_object_or_404(
             PostList, pk=self.kwargs['post_list_id']
         )
         return context
 
-class PostListCreateView(LoginRequiredMixin, CreateView):
+class PostListCreateView(ModalLoginRequiredMixin, CreateView):
     model = PostList
     form_class = PostListForm
     template_name = 'blog/gallery/post_list_form.html'

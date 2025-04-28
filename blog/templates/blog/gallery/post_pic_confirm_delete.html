@@ -4,6 +4,44 @@
 {% block title %}{{ object.title }}{% endblock title %}
 
 {% block content %}
+<main class="site-body py-5">
+  <div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
+      <div class="card-body text-center">
+        <h5 class="card-title mb-4">정말 게시물을 삭제하시겠습니까?</h5>
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="d-flex justify-content-center gap-3">
+            <button type="submit" class="btn btn-danger btn-sm">
+              <i class="bi bi-trash"></i> 삭제
+            </button>
+            <a href="{% url "post_list_detail" object.post_list.id %}" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-x-circle"></i> 취소
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "blog_base/base_with_navbar.html" %}
+{% load static %}
+
+{% block title %}{{ object.title }}{% endblock title %}
+
+{% block content %}
 <main class="site-body">
   <div class="center_box">
     <form class="cp-dialog confirm-delete" method="post">
@@ -17,4 +55,4 @@
     </form>
   </div>
 </main>
-{% endblock content %}
+{% endblock content %} {% endcomment %}

@@ -4,28 +4,42 @@
 {% block title %}Gallery{% endblock title %}
 
 {% block content %}
-<main class="site-body">
-  <div class="button_sample">
-    <a href="{% url "post_list_pics_create" post_list.id %}">목록 작성</a>
-  </div>
-  <div class="container box">
-    <div class="post_container_thumb">
+<main class="site-body py-5">
+  <div class="container">
+
+    <!-- 목록 작성 버튼 -->
+    <div class="mb-4 text-center">
+      <a href="{% url 'post_list_pics_create' post_list.id %}" class="btn btn-outline-light btn-sm">
+        목록 작성
+      </a>
+    </div>
+
+    <!-- 썸네일 리스트 -->
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4 justify-content-center">
       {% for pics in post_list_pics %}
-        <div class="post_thumb">
-          <a href="{% url "post_pics_detail" post_list.id pics.id %}">
-            <div class="pics_thumb">
-              <img src={{ pics.thumbnail.url }} alt="Gallery Image">
-            </div>
-          </a>
-          {% if pics.author == user %}
-            <div class="last_position">
-              <a class="cp-button up_de" href="{% url "post_list_pics_delete" post_list.id pics.id %}">삭제</a>
-              <a class="cp-button up_de" href="{% url "post_list_pics_edit" post_list.id pics.id %}">수정</a>
-            </div>
-          {% endif %}
+        <div class="col">
+          <div class="card h-100 shadow-sm bg-dark text-light">
+            
+            <a href="javascript:void(0);" onclick="fetchWithLoginCheck('{% url 'post_pics_detail' post_list.id pics.id %}')">
+              <img src="{{ pics.thumbnail.url }}" class="card-img-top img-fluid" alt="Gallery Image" style="height: 200px; object-fit: cover; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem;">
+            </a>
+
+            {% if pics.author == user %}
+              <div class="card-body d-flex justify-content-around p-2">
+                <a href="{% url 'post_list_pics_edit' post_list.id pics.id %}" class="btn btn-outline-light btn-sm">
+                  수정
+                </a>
+                <a href="{% url 'post_list_pics_delete' post_list.id pics.id %}" class="btn btn-outline-light btn-sm">
+                  삭제
+                </a>
+              </div>
+            {% endif %}
+
+          </div>
         </div>
       {% endfor %}
     </div>
+    {% include 'blog_base/pagination.html' %}
   </div>
 </main>
 {% endblock content %}

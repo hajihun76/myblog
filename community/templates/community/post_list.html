@@ -8,11 +8,9 @@
 {% block title %}자유게시판{% endblock title %}
 
 {% block content %}
-<!-- ✅ Bootstrap 5 CDN (한번만 로드되게 상위 템플릿에 넣는 것이 이상적입니다) -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- ✅ 커뮤니티 게시판 컨테이너 -->
-<main class="container-lg py-5" style="max-width: 960px;">
+<main class="site-body container-lg py-5" style="max-width: 960px;">
 
   <!-- ✅ 게시판 헤더 -->
   <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
@@ -21,7 +19,7 @@
       <input type="text" name="q" value="{{ request.GET.q }}" class="form-control w-100" placeholder="검색어 입력">
       <button type="submit" class="btn btn-outline-light ms-2">검색</button>
     </form>
-    <a href="{% url 'community_create' %}" class="btn btn-light btn-sm text-dark">
+    <a href="javascript:void(0);" class="btn btn-light btn-sm text-dark" onclick="fetchWithLoginCheck('{% url 'community_create' %}')">
       ✍ 글쓰기
     </a>       
   </div>
@@ -62,39 +60,6 @@
       </tbody>
     </table>
   </div>
-
-  <!-- ✅ 페이지네이션 -->
-  {% if is_paginated %}
-  <nav class="mt-4" aria-label="페이지 이동">
-    <ul class="pagination justify-content-center mb-0">
-      {% if page_obj.has_previous %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="이전">
-            &laquo;
-          </a>
-        </li>
-      {% else %}
-        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
-      {% endif %}
-
-      {% for num in paginator.page_range %}
-        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-        </li>
-      {% endfor %}
-
-      {% if page_obj.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="다음">
-            &raquo;
-          </a>
-        </li>
-      {% else %}
-        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
-      {% endif %}
-    </ul>
-  </nav>
-  {% endif %}
-
+  {% include 'blog_base/pagination.html' %}
 </main>
 {% endblock content %}

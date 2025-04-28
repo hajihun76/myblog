@@ -1,32 +1,367 @@
 {% load static %}
+{% load widget_tweaks %}
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <!-- ✅ Bootstrap 5 CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css">
-  <link rel="stylesheet" type="text/css" href="{% static 'blog/css/theme.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'blog/css/styles.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'blog/css/custom_base.css' %}">
   <link rel="shortcut icon" type="image/png" href="{% static 'blog/images/favicon.ico' %}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}MainStory{% endblock title %} | Hun's Home</title>
-  <meta name="description" content="{% block description %}지훈의 사진과 일상이 담긴 블로그{% endblock %}">
-  
-  <!-- Open Graph 태그 (선택 사항: SNS 공유시 노출) -->
-  <meta property="og:title" content="{% block og_title %}Hun's Home{% endblock %}">
-  <meta property="og:description" content="{% block og_description %}지훈의 사진과 일상 블로그{% endblock %}">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ request.build_absolute_uri }}">
-  <meta property="og:image" content="{% static 'images/huns_home_logo.png' %}">
-  {% block extra_head %}{% endblock extra_head %}
 </head>
+
 <body>
   {% block header %}{% endblock header %}
   {% block content %}{% endblock content %}
   {% block footer %}{% endblock footer %}
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   {% block extra_js %}{% endblock extra_js %}
+
+<!-- ✅ 로그인 모달 -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white rounded-3 shadow-lg">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="loginModalLabel">로그인</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" id="loginModalBody">
+        <form method="POST" id="loginForm">
+          {% csrf_token %}
+          <div id="loginErrorBox" class="alert alert-danger d-none" role="alert"></div>
+
+          <div class="mb-3">
+            {{ form.login|add_class:"form-control"|attr:"placeholder:이메일"|add_error_class:"is-invalid" }}
+            {% for error in form.login.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <div class="mb-3">
+            {{ form.password|add_class:"form-control"|attr:"placeholder:비밀번호"|add_error_class:"is-invalid" }}
+            {% for error in form.password.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <button type="submit" class="btn btn-light w-100">로그인</button>
+          <div class="text-center mt-3">
+            <a href="{% url 'account_reset_password' %}" class="text-light small me-2">비밀번호 찾기</a>
+            <a href="javascript:void(0);" class="text-light small" onclick="openSignupModal()">회원가입</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ 회원가입 모달 -->
+<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white rounded-3 shadow-lg">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="signupModalLabel">회원가입</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" id="signupModalBody">
+        <form method="POST" id="signupForm">
+          {% csrf_token %}
+          <div id="signupErrorBox" class="alert alert-danger d-none" role="alert"></div>
+
+          <div class="mb-3">
+            <input type="email" name="email" class="form-control" placeholder="이메일" required>
+          </div>
+
+          <div class="mb-3">
+            <input type="password" name="password1" class="form-control" placeholder="비밀번호" required>
+          </div>
+
+          <div class="mb-3">
+            <input type="password" name="password2" class="form-control" placeholder="비밀번호 확인" required>
+          </div>
+
+          <button type="submit" class="btn btn-light w-100">회원가입</button>
+          <div class="text-center mt-3">
+            <a href="javascript:void(0);" class="text-light small" onclick="openLoginModal()">로그인하기</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ 비밀번호 변경 모달 -->
+<div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white rounded-3 shadow-lg">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="passwordChangeModalLabel">비밀번호 변경</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" id="passwordChangeModalBody">
+        <form method="POST" id="passwordChangeForm">
+          {% csrf_token %}
+          <div id="passwordChangeErrorBox" class="alert alert-danger d-none" role="alert"></div>
+          <div id="passwordChangeSuccessBox" class="alert alert-success d-none" role="alert"></div>
+
+          <div class="mb-3">
+            <input type="password" name="oldpassword" class="form-control" placeholder="현재 비밀번호" required>
+          </div>
+
+          <div class="mb-3">
+            <input type="password" name="password1" class="form-control" placeholder="새 비밀번호" required>
+          </div>
+
+          <div class="mb-3">
+            <input type="password" name="password2" class="form-control" placeholder="새 비밀번호 확인" required>
+          </div>
+
+          <button type="submit" class="btn btn-light w-100">비밀번호 변경</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ CSRF 가져오는 함수 -->
+<script>
+function getCSRFToken() {
+  return document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+}
+</script>
+
+<!-- ✅ 로그인 모달 제어 스크립트 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const loginModalEl = document.getElementById('loginModal');
+  const loginModal = new bootstrap.Modal(loginModalEl);
+
+  const loginForm = document.getElementById('loginForm');
+  const loginErrorBox = document.getElementById('loginErrorBox');
+
+  function clearLoginErrors() {
+    if (loginErrorBox) {
+      loginErrorBox.classList.add('d-none');
+      loginErrorBox.innerText = '';
+    }
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      clearLoginErrors();
+
+      const formData = new FormData(loginForm);
+      const formBody = new URLSearchParams(formData).toString();
+
+      fetch("{% url 'ajax_login' %}", {
+        method: "POST",
+        body: formBody,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFToken': getCSRFToken()  // ✅ CSRF 토큰 추가
+        },
+        credentials: 'same-origin'
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(data => Promise.reject(data));
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.authenticated) {
+          loginModal.hide();
+          setTimeout(() => {
+            window.location.reload();
+          }, 300);
+        }
+      })
+      .catch(data => {
+        if (loginErrorBox && data.errors) {
+          loginErrorBox.classList.remove('d-none');
+          loginErrorBox.innerText = data.errors.join(' ');
+        }
+      });
+    });
+  }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const signupModalEl = document.getElementById('signupModal');
+  const signupModal = new bootstrap.Modal(signupModalEl);
+
+  const signupForm = document.getElementById('signupForm');
+  const signupErrorBox = document.getElementById('signupErrorBox');
+
+  function clearSignupErrors() {
+    if (signupErrorBox) {
+      signupErrorBox.classList.add('d-none');
+      signupErrorBox.innerText = '';
+    }
+  }
+
+  if (signupForm) {
+    signupForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      clearSignupErrors();
+
+      const formData = new FormData(signupForm);
+      const formBody = new URLSearchParams(formData).toString();
+
+      fetch("{% url 'account_signup' %}", {
+        method: "POST",
+        body: formBody,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFToken': getCSRFToken()
+        },
+        credentials: 'same-origin'
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(text => Promise.reject(text));
+        }
+        return response.text();
+      })
+      .then(data => {
+        signupModal.hide();
+        setTimeout(() => {
+          window.location.reload();  // 회원가입 성공하면 새로고침 (로그인된 상태로)
+        }, 300);
+      })
+      .catch(errorText => {
+        if (signupErrorBox) {
+          signupErrorBox.classList.remove('d-none');
+          signupErrorBox.innerText = '회원가입 실패: 이메일 또는 비밀번호를 확인하세요.';
+        }
+        console.error('회원가입 실패:', errorText);
+      });
+    });
+  }
+});
+
+
+function fetchWithLoginCheck(targetUrl) {
+  fetch(targetUrl, {
+    method: 'HEAD',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    credentials: 'same-origin',
+  })
+  .then(response => {
+    if (response.status === 401) {
+      const loginModalEl = document.getElementById('loginModal');
+      const loginModal = new bootstrap.Modal(loginModalEl);
+      loginModal.show(); // ✅ 로그인 모달 띄우기
+    } else if (response.ok) {
+      window.location.href = targetUrl; // ✅ 정상 로그인 → 페이지 이동
+    } else {
+      console.error('Unhandled response:', response.status);
+    }
+  })
+  .catch(error => {
+    console.error('Error during login check:', error);
+  });
+}
+
+function openSignupModal() {
+  const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+  loginModal.hide();
+
+  const signupModal = new bootstrap.Modal(document.getElementById('signupModal'));
+  signupModal.show();
+}
+
+function openLoginModal() {
+  const signupModal = bootstrap.Modal.getInstance(document.getElementById('signupModal'));
+  signupModal.hide();
+
+  const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+  loginModal.show();
+}
+
+// ✅ 비밀번호 변경 모달 제어
+document.addEventListener('DOMContentLoaded', function() {
+  const passwordChangeForm = document.getElementById('passwordChangeForm');
+  const passwordChangeErrorBox = document.getElementById('passwordChangeErrorBox');
+  const passwordChangeSuccessBox = document.getElementById('passwordChangeSuccessBox');
+
+  if (passwordChangeForm) {
+    passwordChangeForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      passwordChangeErrorBox.classList.add('d-none');
+      passwordChangeErrorBox.innerText = '';
+      passwordChangeSuccessBox.classList.add('d-none');
+      passwordChangeSuccessBox.innerText = '';
+
+      const formData = new FormData(passwordChangeForm);
+      const formBody = new URLSearchParams(formData).toString();
+
+      fetch("{% url 'account_password_change' %}", {
+        method: "POST",
+        body: formBody,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFToken': getCSRFToken()
+        },
+        credentials: 'same-origin'
+      })
+      .then(response => 
+        response.json().then(data => {
+          if (response.ok) {
+            return data;
+          } else {
+            throw data;
+          }
+        })
+      )
+      .then(data => {
+        // ✅ 성공
+        passwordChangeSuccessBox.classList.remove('d-none');
+        passwordChangeSuccessBox.innerText = "비밀번호가 성공적으로 변경되었습니다.";
+        
+        setTimeout(() => {
+          const modal = bootstrap.Modal.getInstance(document.getElementById('passwordChangeModal'));
+          if (modal) modal.hide();
+          window.location.reload();
+        }, 1500);
+      })
+      .catch(data => {
+        // ✅ 실패
+        if (data.errors) {
+          passwordChangeErrorBox.classList.remove('d-none');
+          passwordChangeErrorBox.innerText = data.errors.join(' ');
+        } else {
+          passwordChangeErrorBox.classList.remove('d-none');
+          passwordChangeErrorBox.innerText = '비밀번호 변경 실패. 다시 시도하세요.';
+        }
+      });
+    });
+  }
+});
+
+
+function openPasswordChangeModal() {
+  const passwordChangeModal = new bootstrap.Modal(document.getElementById('passwordChangeModal'));
+  passwordChangeModal.show();
+}
+</script>
+
 </body>
 </html>

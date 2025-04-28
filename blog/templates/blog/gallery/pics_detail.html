@@ -1,55 +1,59 @@
 {% extends "blog_base/base_with_navbar.html" %}
 {% load static %}
-{% load exif_extras %} 
+{% load exif_extras %}
 
 {% block title %}{{ post_list.title }}{% endblock title %}
 
 {% block content %}
-<main class="site-body">
-  <div class="container_detail">
-    <div class="image-frame">
-      <img src="{{ pic.image.url }}" alt="Original Image">
-    </div>
-    <section class="meta_info">
-      {% if exif %}
-        <ul>
-          {% if exif.Make and exif.Model %}
-            <li>카메라: {{ exif.Make }} {{ exif.Model }}</li>
-          {% endif %}
-          {% if exif.LensModel %}
-            <li>렌즈: {{ exif.LensModel }}</li>
-          {% endif %}
-          {% if exif.FocalLength %}
-              <li>초점 거리: {{ exif.FocalLength|rational_to_float }} mm</li>
-          {% endif %}
-          {% if exif.FNumber %}
-            <li>
-              조리개: f/{{ exif.FNumber|rational_to_float }}
-            </li>
-          {% endif %}
-          {% if exif.ExposureTime %}
-            {% with num=exif.ExposureTime.0 den=exif.ExposureTime.1 %}
-              <li>셔터 속도: {{ num }}/{{ den }} 초</li>
-            {% endwith %}
-          {% endif %}
-          {% if exif.ISOSpeedRatings %}
-            <li>ISO: {{ exif.ISOSpeedRatings }}</li>
-          {% endif %}
-          {% if exif.DateTimeOriginal %}
-            <li>촬영 일시: {{ exif.DateTimeOriginal }}</li>
-          {% endif %}
-        </ul>
-        <div class="content_detail">
-          {{ pic.content|linebreaksbr}}
-        </div>
-      {% else %}
-        <p>EXIF 정보가 없습니다.</p>
-      {% endif %}
-    </section>
+<main class="site-body d-flex flex-column align-items-center py-4" style="min-height: 100vh;">
+
+  <!-- 사진 프레임 (액자 테두리 제거됨) -->
+  <div class="image-frame mb-4" style="width: 95vw; height: 75vh; overflow: hidden; box-shadow: 0 0 15px rgba(0,0,0,0.4); border-radius: 12px; display: flex; justify-content: center;">
+    <img src="{{ pic.image.url }}" alt="Original Image" class="img-fluid pic_frame" style="max-width: 100%; max-height: 100%; object-fit: contain; border: 1px solid white;">
   </div>
+
+  <!-- EXIF 정보 + 글 내용 -->
+  <div class="d-flex flex-wrap justify-content-center" style="max-width: 95vw; background-color: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px; color: #f1f1f1; font-size: 0.9rem;">
+    
+    {% if exif %}
+    <div class="me-5">
+      <ul class="list-unstyled">
+        {% if exif.Make and exif.Model %}
+          <li>📷 카메라: {{ exif.Make }} {{ exif.Model }}</li>
+        {% endif %}
+        {% if exif.LensModel %}
+          <li>🔭 렌즈: {{ exif.LensModel }}</li>
+        {% endif %}
+        {% if exif.FocalLength %}
+          <li>🎯 초점 거리: {{ exif.FocalLength|rational_to_float }} mm</li>
+        {% endif %}
+        {% if exif.FNumber %}
+          <li>🌟 조리개: f/{{ exif.FNumber|rational_to_float }}</li>
+        {% endif %}
+        {% if exif.ExposureTime %}
+          {% with num=exif.ExposureTime.0 den=exif.ExposureTime.1 %}
+            <li>⏱ 셔터 속도: {{ num }}/{{ den }} 초</li>
+          {% endwith %}
+        {% endif %}
+        {% if exif.ISOSpeedRatings %}
+          <li>🌡 ISO: {{ exif.ISOSpeedRatings }}</li>
+        {% endif %}
+        {% if exif.DateTimeOriginal %}
+          <li>📅 촬영 일시: {{ exif.DateTimeOriginal }}</li>
+        {% endif %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <div class="content_detail" style="min-width: 200px; max-width: 500px;">
+      {{ pic.content|linebreaksbr }}
+    </div>
+
+  </div>
+
 </main>
 {% endblock content %}
 
 {% block extra_js %}
-<script src="{% static 'blog/js/responsive_image.js' %}"></script>
+<!-- 여기에 필요하면 JavaScript 추가 -->
 {% endblock extra_js %}

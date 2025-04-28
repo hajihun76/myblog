@@ -2,36 +2,54 @@
 {% load static %}
 
 {% block header %}
-<header class="site-header navbar">
-<div class="content max-width">
-  <a href="{% url "index" %}">
-    <img class="logo" src="{% static 'blog/images/logo.png' %}" alt="Hun's Home Logo">
-  </a>
-  <nav>
-    <ul class="navbar">
-      {% if user.is_authenticated %}
-        <li><a href="{% url "account_change_password" %}">비밀번호 변경</a></li>
-        <li><a href="{% url "account_logout" %}">로그아웃</a></li>
-        <li><a href="{% url "profile" user.id %}">내 프로필</a></li>
-      {% else %}
-        <li><a href="{% url "account_login" %}">로그인</a></li>
-        <li><a href="{% url "account_signup" %}">회원가입</a></li>
-      {% endif %}
-      {% if user.is_superuser %}
-        <li><a href="{% url 'admin:index' %}">관리자</a></li>
-      {% endif %}
-    </ul>
-  </nav>
-</div>
-</header>
+<!-- ✅ Bootstrap 5 Navbar 적용 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{% url "index" %}">
+      <img src="{% static 'blog/images/logo.png' %}" alt="Hun's Home Logo" height="40">
+    </a>
+
+    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "profile" user.id %}">내 프로필</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" onclick="openPasswordChangeModal()">비밀번호 변경</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "account_logout" %}">로그아웃</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <button class="nav-link btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">로그인</button>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-light btn-sm" href="#" onclick="openSignupModal()">회원가입</a>
+          </li>
+        {% endif %}
+        {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "admin:index" %}">관리자</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  <div> 
+</nav>
 {% endblock header %}
 
 {% block footer %}
-<footer class="site-footer">
-  <div class="max-content-width content">
-    <div>hajihun76@gmail.com</div>
-    <div>Crafted with passion by Jihoon Ha.</div>
+<!-- ✅ Bootstrap 5 Footer 스타일 -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+  <div class="container">
+    <small>hajihun76@gmail.com</small><br>
+    <small>Crafted with passion by Jihoon Ha.</small>
   </div>
 </footer>
 {% endblock footer %}
-

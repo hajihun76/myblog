@@ -5,13 +5,14 @@ from django.shortcuts import redirect, get_object_or_404
 from django.db.models import Q
 from .models import Post, Comment
 from .forms import CommentForm, PostForm
+from accounts.mixins import ModalLoginRequiredMixin
 
 class PostListView(ListView):
     model = Post
     template_name = 'community/post_list.html'
     context_object_name = 'posts'
     ordering = ['-created_at']
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -26,7 +27,7 @@ class PostListView(ListView):
         return qs.order_by('-is_notice', '-created_at')
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(ModalLoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
     template_name = 'community/post_form.html'

@@ -1,0 +1,46 @@
+{% if page_obj.has_other_pages %}
+<nav aria-label="Page navigation" class="mt-4">
+  <ul class="pagination justify-content-center">
+
+    <!-- 이전 버튼 -->
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link bg-dark text-light border-light" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span> 이전
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link bg-dark text-secondary border-secondary" aria-hidden="true">&laquo; 이전</span>
+      </li>
+    {% endif %}
+
+    <!-- 페이지 번호들 -->
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <li class="page-item active" aria-current="page">
+          <span class="page-link bg-light text-dark border-light">{{ num }}</span>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link bg-dark text-light border-light" href="?page={{ num }}">{{ num }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+    <!-- 다음 버튼 -->
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link bg-dark text-light border-light" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+          다음 <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link bg-dark text-secondary border-secondary">다음 &raquo;</span>
+      </li>
+    {% endif %}
+
+  </ul>
+</nav>
+{% endif %}

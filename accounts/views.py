@@ -6,6 +6,10 @@ from django.urls import reverse, resolve
 from django.views.generic import TemplateView, RedirectView
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.conf import settings
+from django.http import JsonResponse
+from allauth.account.forms import LoginForm
+from django.views import View
+from django.contrib.auth import login
 
 
 class CustomLoginView(LoginView):
@@ -76,3 +80,19 @@ class ForceMobileRedirectView(RedirectView):
             return reverse('busorder:main')
         else:
             return reverse('permission_pending')
+        
+class AjaxLoginView(View):
+    def post(self, request, *args, **kwargs):
+        form = LoginForm(data=request.POST, request=request)  # ✅ 수정 완료
+        if form.is_valid():
+            user = form.user  # ✅ 여기 고침: get_user() ❌ → user ✅
+            if user:
+                login(request, user)
+                return JsonResponse({'authenticated': True})
+            else:
+                return JsonResponse({'authenticated': False, 'errors': ['사용자 인증 실패']}, status=400)
+        else:
+            error_messages = []
+            for field_errors in form.errors.values():
+                error_messages.extend(field_errors)
+            return JsonResponse({'authenticated': False, 'errors': error_messages}, status=400)

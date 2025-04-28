@@ -1,66 +1,89 @@
-{% extends "blog_base/base.html" %}
-
+{% extends "blog_base/base_with_navbar.html" %}
 {% load static %}
 
 {% block content %}
-<main class="site-body">
-  <div class="container">
-    <img class="logo main" src="{% static 'blog/images/logo.png' %}" alt="Hun's Home Logo">
+<main class="flex-grow-1 d-flex flex-column align-items-center justify-content-start mt-5">
+  <div class="container text-center">
+    <!-- 로고 -->
+    <img src="{% static 'blog/images/logo.png' %}" alt="Hun's Home Logo" class="img-fluid my-5" style="max-width: 200px;">
   </div>
-  <div class="container box">
-    <div class="post_container">
-      <div class="post">
-        <a href="{% url "gallery_list" %}">
-          <h2>Gallery</h2>
-          <p class="text">이 곳은 그동안 제가 찍어왔던 사진이나 동영상을 올리는 개인적인 공간입니다.</p>
-          <p class="last">사진, 동영상, 드론영상</p>
-        </a>
+
+  <!-- 카드 리스트 -->
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-5">
+      <div class="col">
+        <div class="card card-custom mx-auto text-white h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title card-title-custom">Gallery</h5>
+            <p class="card-text card-text-custom">사진이나 동영상을 올리는 개인 공간입니다.</p>
+            <p class="last mt-auto">사진, 동영상, 드론영상</p>
+            <!-- ✅ 카드 전체 링크 처리 -->
+            <a href="{% url "gallery_list" %}" class="stretched-link"></a>
+          </div>
+        </div>
       </div>
-      <div class="post">
-        <a href="#">
-          <h2>맛집, 여행지</h2>
-          <p class="text">바이크나 자동차여행 자전거여행 맛집투어등등 저와 여러분의 여행들을 담을 공간입니다.</p>
-          <p class="last">맛집사진, 여행사진</p>
-        </a>
+
+      <div class="col">
+        <div class="card card-custom mx-auto text-white h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title card-title-custom">맛집, 여행지</h5>
+            <p class="card-text card-text-custom">바이크나 자동차여행 자전거여행 맛집투어등등 저와 여러분의 여행들을 담을 공간입니다.</p>
+            <p class="last mt-auto">맛집사진, 여행사진</p>
+            <!-- ✅ 카드 전체 링크 처리 -->
+            <a href="#" class="stretched-link"></a>
+          </div>
+        </div>
       </div>
-      <div class="post">
-        <a href="{% url "community_list" %}">
-          <h2>Community</h2>
-          <p class="text">회원들의 대화 공간... 그냥 편한 이야기들을 올려 주세요.</p>
-          <p class="last">게시판</p>
-        </a>
+
+      <div class="col">
+        <div class="card card-custom mx-auto text-white h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title card-title-custom">Community</h5>
+            <p class="card-text card-text-custom">회원들의 대화 공간... 그냥 편한 이야기들을 올려 주세요.</p>
+            <p class="last mt-auto">게시판</p>
+            <!-- ✅ 카드 전체 링크 처리 -->
+            <a href="{% url 'community_list' %}" class="stretched-link"></a>
+          </div>
+        </div>
       </div>
-      <div class="post">
-        <a href="{% url "busorder:calendar-view" %}">
-          <h2>7727 버스 순번표</h2>
-          <p class="text">나중에 Members-Only 로 이동할 기능 내 버스번호만 입력하면 몇번째 순번인지 출력</p>
-          <p class="last">Calendar</p>
-        </a>
+
+      <div class="col">
+        <div class="card card-custom mx-auto text-white h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title card-title-custom">7727 버스 순번표</h5>
+            <p class="card-text card-text-custom">나중에 Members-Only 로 이동할 기능 내 버스번호만 입력하면 몇번째 순번인지 출력</p>
+            <p class="last mt-auto">Calendar, Android 앱 연결완료</p>
+            <!-- ✅ 카드 전체 링크 처리 -->
+            <a href="javascript:void(0);" class="stretched-link" onclick="fetchWithLoginCheck('{% url 'busorder:calendar-view' %}')"></a>
+          </div>
+        </div>
       </div>
-      <div class="post">
-        <a href="#">
-          <h2>공사중!!</h2>
-          <p class="text">앞으로 추가될 예정인데 무얼 추가해야할까요? ㅜㅜ</p>
-          <p class="last">몰랑 아 몰랑</p>
-        </a>
+
+      <div class="col">
+        <div class="card card-custom mx-auto text-white h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title card-title-custom">공사중!!</h5>
+            <p class="card-text card-text-custom">앞으로 추가될 예정인데 무얼 추가해야할까요? ㅜㅜ</p>
+            <p class="last mt-auto">몰랑 아 몰랑</p>
+            <!-- ✅ 카드 전체 링크 처리 -->
+            <a href="#" class="stretched-link"></a>
+          </div>
+        </div>
       </div>
-      <div class="post">
-        <a href="#">
-          <h2>Members-Only Secret Space</h2>
-          <p class="text">개인 회원들의 공간입니다. 특별한 이야기들을 나눠 보아요~!!</p>
-          <p class="last">게시판</p>
-        </a>
+
+      <div class="col">
+        <div class="card card-custom mx-auto text-white h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title card-title-custom">Members-Only</h5>
+            <p class="card-text card-text-custom">개인적, 업무적인 비공개 공간</p>
+            <p class="last mt-auto">Secret space</p>
+            <!-- ✅ 카드 전체 링크 처리 -->
+            <a href="#" class="stretched-link"></a>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </main>
 {% endblock content %}
-
-{% block footer %}
-<footer class="site-footer">
-  <div class="max-content-width content">
-    <div>hajihun76@gmail.com</div>
-    <div>Crafted with passion by Jihoon Ha.</div>
-  </div>
-</footer>
-{% endblock footer %}

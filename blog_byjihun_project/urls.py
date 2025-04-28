@@ -20,12 +20,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
-from blog.views import CustomPasswordChangeView
 from blog.sitemaps import PostListSitemap
-from accounts.views import CustomLoginView, CustomSignupView
-from accounts.views import PermissionPendingView
-from accounts.views import ForceMobileRedirectView
+from accounts.views import CustomLoginView, CustomSignupView, PermissionPendingView, AjaxLoginView
 from accounts import views
+from blog.views import AjaxPasswordChangeView
 
 sitemaps = {
     'postlists': PostListSitemap,
@@ -41,7 +39,7 @@ urlpatterns = [
     ), name='robots.txt'),
     # sitemap.xml 추가
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
-    path('password/change/', CustomPasswordChangeView.as_view(), name='account_password_change'),
+    path('password/change/', AjaxPasswordChangeView.as_view(), name='account_password_change'),
     path('', include('allauth.urls')),
     path('ckeditor5/', include('django_ckeditor_5.urls')),
     path('busorder/', include('busorder.urls')),
@@ -51,6 +49,7 @@ urlpatterns = [
     path("permission-pending/", TemplateView.as_view(template_name="accounts/permission_pending.html"), name="permission_pending"),
     path('permission-pending/', PermissionPendingView.as_view(), name='permission_pending'),
     path('jjakggung/mobile-redirect/', views.ForceMobileRedirectView.as_view(), name='force_mobile_redirect'),
+    path('ajax-login/', AjaxLoginView.as_view(), name='ajax_login'),
 ]
 
 # 개발 중에만 media 파일을 서빙하도록

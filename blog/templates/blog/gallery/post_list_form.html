@@ -2,89 +2,85 @@
 {% load static %}
 {% load widget_tweaks %}
 
-{% block title %}새 목록 작성{% endblock title %}
+{% block title %}{% if object %}목록 수정{% else %}새 목록 작성{% endif %}{% endblock title %}
 
 {% block content %}
-<main class="site-body">
-  <form class="review-form max-content-width" method="post" autocomplete="off" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="title">
-      {{ form.title|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:제목" }}
-      {% for error in form.title.errors %}
-        <div class="error-message">{{ error }}</div>
-      {% endfor %}
-    </div>
-    <div class="restaurant-name">
-      {{ form.content|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:내용을 입력해 주세요." }}
-      {% for error in form.content.errors %}
-        <div class="error-message">{{ error }}</div>
-      {% endfor %}
-    </div>
-    <div class="restaurant-link">
-      {{ form.created_at|add_class:"cp-input"|add_error_class:"error" }}
-      {% for error in form.created_at.errors %}
-        <div class="error-message">{{ error }}</div>
-      {% endfor %}
-    </div>
-    <div class="file">
-      <div class="file-content">
-        <div class="thumb_js">
-          {% if object.thumb %}
-          <img
-            src="{{ object.thumb.url }}"
-            alt="현재 이미지"
-            class="preview-img"
-            style="
-              display: block;
-              margin-bottom: 8px;
-              max-width:120px;
-              border:1px solid #ccc;
-              border-radius:4px;
-              object-fit:cover;
-            "
-          >
-        {% endif %}
-          <label for="id_image"></label><br>
-          {{ form.thumb|add_class:"cp-input file-input"|attr:"id:id_image"|attr:"accept:image/*" }}
-          {% for error in form.thumb.errors %}
-            <div class="error-message">{{ error }}</div>
-          {% endfor %}
-          <img id="image-preview" src="" alt="미리보기" style="display:none; margin-top:8px; max-width:120px; border:1px solid #ccc; border-radius:4px; object-fit:cover;">
-        </div>
+<main class="site-body py-5">
+  <div class="container">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="mb-4 text-center">
+          {% if object %}
+            목록 수정
+          {% else %}
+            새 목록 작성
+          {% endif %}
+        </h2>
+
+        <form method="post" autocomplete="off" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <!-- 제목 입력 -->
+          <div class="mb-3">
+            {{ form.title|add_class:"form-control"|add_error_class:"is-invalid"|attr:"placeholder:제목을 입력하세요" }}
+            {% for error in form.title.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <!-- 내용 입력 -->
+          <div class="mb-3">
+            {{ form.content|add_class:"form-control"|add_error_class:"is-invalid"|attr:"placeholder:내용을 입력하세요" }}
+            {% for error in form.content.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <!-- 작성일 입력 -->
+          <div class="mb-3">
+            {{ form.created_at|add_class:"form-control"|add_error_class:"is-invalid" }}
+            {% for error in form.created_at.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <!-- 썸네일 업로드 영역 -->
+          <div class="text-center mt-4">
+            <h5 class="mb-2 text-muted">썸네일 업로드</h5>
+
+            {% if object.thumb %}
+              <div class="mb-3">
+                <div class="small text-muted">현재 이미지</div>
+                <img src="{{ object.thumb.url }}" alt="현재 이미지" class="img-thumbnail d-block mx-auto" style="max-width: 150px;">
+              </div>
+            {% endif %}
+
+            <div class="mb-3">
+              <label class="form-label small text-muted">새 썸네일 업로드</label>
+              <input type="file" name="thumb" id="id_thumb" class="form-control" accept="image/*">
+
+              <!-- 새 이미지 미리보기 (처음에는 안 보이게) -->
+              <div id="preview-wrapper" class="text-center" style="display: none;">
+                <img id="image-preview" class="img-thumbnail mt-2 mx-auto d-block"
+                  style="max-width: 150px; border:1px solid #ccc; border-radius:4px; object-fit:cover;"
+                  alt="미리보기">
+              </div>
+            </div>
+          </div>
+
+          <!-- 버튼 영역 -->
+          <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'gallery_list' %}" class="btn btn-outline-secondary btn-sm bi bi-x-circle"> 취소</a>
+            <button type="submit" class="btn btn-dark btn-outline-light btn-sm bi bi-check-circle"> 완료</button>
+          </div>
+
+        </form>
       </div>
     </div>
-    <div class="buttons">
-      <a 
-        class="cp-button secondary cancel" 
-        href="{% url "gallery_list" %}"
-      >
-        취소
-      </a>
-      <button class="cp-button submit" type="submit">완료</button>
-    </div>
-  </form>
+  </div>
 </main>
 {% endblock content %}
 
 {% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const fileInput = document.getElementById('id_image');
-  const previewImg = document.getElementById('image-preview');
-  if (!fileInput || !previewImg) return;
-
-  fileInput.addEventListener('change', function() {
-    const file = this.files[0];
-    if (!file) {
-      previewImg.style.display = 'none';
-      previewImg.src = '';
-      return;
-    }
-    const url = URL.createObjectURL(file);
-    previewImg.src = url;
-    previewImg.style.display = 'block';
-    previewImg.onload = () => URL.revokeObjectURL(url);
-  });
-});
-</script>
+<script src="{% static 'blog/js/image_preview.js' %}"></script>
 {% endblock extra_js %}

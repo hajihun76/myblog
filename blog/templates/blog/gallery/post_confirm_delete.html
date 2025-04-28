@@ -4,17 +4,25 @@
 {% block title %}{{ object.title }}{% endblock title %}
 
 {% block content %}
-<main class="site-body">
-  <div class="center_box">
-    <form class="cp-dialog confirm-delete" method="post">
-      {% csrf_token %}
-      <span class="content">정말 게시물을 삭제하시겠습니까?</span>
-      <div class="last_position">
-        <p></p>
-        <button class="cp-button" type="submit">삭제</button>
-        <a class="cp-button" href="{% url "gallery_list" %}">취소</a>
+<main class="site-body py-5">
+  <div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
+      <div class="card-body text-center">
+        <h5 class="card-title mb-4">정말 게시물을 삭제하시겠습니까?</h5>
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="d-flex justify-content-center gap-3">
+            <button type="submit" class="btn btn-danger btn-sm">
+              <i class="bi bi-trash"></i> 삭제
+            </button>
+            <a href="{% url "gallery_list" %}" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-x-circle"></i> 취소
+            </a>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   </div>
 </main>
 {% endblock content %}

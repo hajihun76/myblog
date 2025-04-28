@@ -1,13 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
   const img = document.getElementById('responsiveImg');
+  if (!img) return;
 
   function setOrientationClass() {
     if (img.naturalWidth >= img.naturalHeight) {
-      img.classList.add('landscape');
-      img.classList.remove('portrait');
+      img.style.width = '100%';
+      img.style.height = 'auto';
     } else {
-      img.classList.add('portrait');
-      img.classList.remove('landscape');
+      img.style.width = 'auto';
+      img.style.height = '80vh';
     }
   }
 

@@ -93,6 +93,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'blog.context_processors.login_form',
+                'blog.context_processors.signup_form',
             ],
         },
     },
@@ -158,7 +160,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 ACCOUNT_SIGNUP_REDIRECT_URL = 'profile-set'
-LOGIN_REDIRECT_URL = 'index'
+# LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'account_login'
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_LOGIN_METHODS = {'email'}

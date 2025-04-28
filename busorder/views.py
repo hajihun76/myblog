@@ -17,6 +17,7 @@ import random
 from django.db.models.functions import TruncMonth
 from django.utils.timezone import now
 from django.contrib.auth.models import User
+from blog.utils.decorators import modal_login_required
 
 
 
@@ -58,7 +59,7 @@ def get_order(schedule, date, bus_number):
         return -1
 
 # ✅ 메인 페이지 뷰
-@login_required
+@modal_login_required
 @permission_required('busorder.can_access_busorder', raise_exception=True)
 def calendar_view(request):
     return render(request, "busorder/calendar.html")
